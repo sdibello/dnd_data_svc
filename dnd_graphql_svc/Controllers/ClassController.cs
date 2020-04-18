@@ -57,6 +57,7 @@ namespace dnd_graphql_svc.Controllers
         [HttpGet("{id}/spells")]
         public async Task<ActionResult<List<ClassSpell>>> GetSpellClassLevel(int id)
         {
+         
             var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == id)
                 .Join(
                     _context.DndSpell,
