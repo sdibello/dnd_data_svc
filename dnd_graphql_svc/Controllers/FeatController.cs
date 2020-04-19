@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using dnd_dal;
 using dnd_graphql_svc.dto;
+using System.Web;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,7 +41,11 @@ namespace dnd_graphql_svc.Controllers
             }
             else
             {
-                featdb = _context.DndFeat.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
+                if (id.IndexOf(' ') > 0) {
+                    featdb = _context.DndFeat.Where(x => x.Name.ToLower() == HttpUtility.UrlDecode(id.ToLower())).FirstOrDefault();
+                } else {
+                    featdb = _context.DndFeat.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
+                }
             }
 
             if (featdb != null)

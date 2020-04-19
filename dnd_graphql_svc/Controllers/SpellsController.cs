@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using dnd_dal;
 using dnd_graphql_svc.dto;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
+using System.Web;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -67,7 +67,11 @@ namespace dnd_graphql_svc.Controllers
             {
                 spelldb = _context.DndSpell.Where(x => x.Id == intId).FirstOrDefault();
             } else {
-                spelldb = _context.DndSpell.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
+                if (id.IndexOf(' ') > 0) {
+                    spelldb = _context.DndSpell.Where(x => x.Name.ToLower() == HttpUtility.UrlDecode(id.ToLower())).FirstOrDefault();
+                } else {
+                    spelldb = _context.DndSpell.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
+                }
             }
 
             if (spelldb != null)
