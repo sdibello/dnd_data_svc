@@ -67,7 +67,7 @@ namespace dnd_graphql_svc.Controllers
             {
                 spelldb = _context.DndSpell.Where(x => x.Id == intId).FirstOrDefault();
             } else {
-                spelldb = _context.DndSpell.Where(x => x.Slug == id).FirstOrDefault();
+                spelldb = _context.DndSpell.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
             }
 
             if (spelldb != null)

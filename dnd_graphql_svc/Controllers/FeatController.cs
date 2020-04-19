@@ -40,7 +40,7 @@ namespace dnd_graphql_svc.Controllers
             }
             else
             {
-                featdb = _context.DndFeat.Where(x => x.Slug == id).FirstOrDefault();
+                featdb = _context.DndFeat.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
             }
 
             if (featdb != null)
@@ -51,6 +51,62 @@ namespace dnd_graphql_svc.Controllers
 
             Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
             return NotFound();
+        }
+
+
+        // http://localhost:5241/api/v1/feat/681/requirement
+        [HttpGet("{id}/requirement")]
+        public async Task<ActionResult<FeatTree>> GetFeatTree(long id)
+        {
+            var data = new FeatTree();
+
+            DndFeat featdb = _context.DndFeat.Where(x => x.Id == id).FirstOrDefault();
+
+            if (featdb == null)
+            {
+                Console.WriteLine(string.Format("log - get spell class - id = {0}", id));
+                return NotFound();
+            };
+
+            data.RootFeatid = featdb.Id;
+            data.RootFeatName = featdb.Name;
+            featdb = null;
+
+            var queryRequired = _context.DndFeatrequiresfeat.Where(frf => frf.SourceFeatId == id)
+                .Join(
+                    _context.DndFeat,
+                    frf => frf.RequiredFeatId,
+                    f => f.Id,
+                    (frf, f) => new BasicFeat
+                    {
+                        id = f.Id,
+                        name = f.Name
+                    })
+                //.OrderBy(g => g.ClassId)
+                .ToList();
+
+            var queryRequireBy = _context.DndFeatrequiresfeat.Where(frf => frf.RequiredFeatId == id)
+            .Join(
+                _context.DndFeat,
+                frf => frf.SourceFeatId,
+                f => f.Id,
+                (frf, f) => new BasicFeat
+                {
+                    id = f.Id,
+                    name = f.Name
+                })
+            //.OrderBy(g => g.ClassId)
+            .ToList();
+
+            data.requiredFeats = queryRequired;
+            data.FeatsRequiredBy = queryRequireBy;
+
+            queryRequired = null;
+            queryRequireBy = null;
+
+
+            Console.WriteLine(string.Format("log - get spell class - id = {0}", id));
+            return data;
         }
 
     }
