@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using dnd_dal;
 using dnd_graphql_svc.dto;
-using Microsoft.EntityFrameworkCore;
 using System.Web;
+using Lucene.Net.Store;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Index;
+using Lucene.Net.Documents;
+using Lucene.Net.Search;
+using Lucene.Net.QueryParsers;
+using Directory = Lucene.Net.Store.Directory;
+using Lucene.Net.QueryParsers.Classic;
+using System.IO;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -15,6 +22,8 @@ namespace dnd_graphql_svc.Controllers
     [Route("/api/v1/[controller]")]
     public class SpellsController : Controller
     {
+
+
         public IActionResult Index()
         {
             return View();
@@ -80,7 +89,73 @@ namespace dnd_graphql_svc.Controllers
                 return spelldb;
             };
 
+            if (int.TryParse(id, out intId) == false)
+            {
+                var AppLuceneVersion = Lucene.Net.Util.LuceneVersion.LUCENE_48;
+                var di = new DirectoryInfo(@"C:\Index\");
+                var dir = FSDirectory.Open(di);
+
+
+                var analyzer = new StandardAnalyzer(AppLuceneVersion);
+                var indexConfig = new IndexWriterConfig(AppLuceneVersion, analyzer);
+                var writer = new IndexWriter(dir, indexConfig);
+
+                var searcher = new IndexSearcher(writer.GetReader(applyAllDeletes: true));
+                //var phrase = new FuzzyQuery(new Term("name", id), 0, 0, 10, false);
+                var phrase = new  WildcardQuery(new Term("name", '*' + id + '*'));
+                //phrase.Add(new Term("name", id));
+
+                var hits = searcher.Search(phrase, 20).ScoreDocs;
+                Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
+                foreach (var hit in hits)
+                {
+                    var foundDoc = searcher.Doc(hit.Doc);
+                    Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
+                }
+
+                if (writer.IsClosed == false)
+                {
+                    writer.Dispose();
+                }
+            }
+
+
+
             Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
+            return NotFound();
+        }
+
+        [HttpGet("{id}/index")]
+        public async Task<ActionResult<DndSpell>> updateIndex()
+        {
+            var AppLuceneVersion = Lucene.Net.Util.LuceneVersion.LUCENE_48;
+
+            var indexLocation = @"C:\Index";
+            var dir = FSDirectory.Open(indexLocation);
+
+            var analyzer = new StandardAnalyzer(AppLuceneVersion);
+
+            var indexconfig = new Lucene.Net.Index.IndexWriterConfig(AppLuceneVersion, analyzer);
+            var write = new IndexWriter(dir, indexconfig);
+
+            var data = _context.DndSpell.ToList();
+
+            foreach (var spell in data)
+            {
+                Document doc = new Document
+                {
+                    new StringField("name", spell.Name.ToLower(),Field.Store.YES),
+                    new StringField("id", spell.Id.ToString(),Field.Store.YES),
+                    new StringField("desc", spell.Description.ToLower(),Field.Store.YES),
+                    new StringField("slug", spell.Slug.ToLower(),Field.Store.YES),
+                };
+
+                Console.WriteLine(string.Format(" writing {0}", spell.Name));
+                write.AddDocument(doc);
+                write.Flush(triggerMerge: false, applyAllDeletes: false);
+                write.Commit();
+            }
+
             return NotFound();
         }
 
