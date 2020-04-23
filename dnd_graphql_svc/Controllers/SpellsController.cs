@@ -15,6 +15,7 @@ using Lucene.Net.QueryParsers;
 using Directory = Lucene.Net.Store.Directory;
 using Lucene.Net.QueryParsers.Classic;
 using System.IO;
+using dnd_graphql_svc.Search;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -22,7 +23,7 @@ namespace dnd_graphql_svc.Controllers
     [Route("/api/v1/[controller]")]
     public class SpellsController : Controller
     {
-
+        public Search.Search _find;
 
         public IActionResult Index()
         {
@@ -34,6 +35,7 @@ namespace dnd_graphql_svc.Controllers
         public SpellsController(dndContext context)
         {
             _context = context;
+            _find = new Search.Search();
         }
 
         [HttpGet("{id}/class")]
@@ -89,37 +91,9 @@ namespace dnd_graphql_svc.Controllers
                 return spelldb;
             };
 
-            if (int.TryParse(id, out intId) == false)
-            {
-                var AppLuceneVersion = Lucene.Net.Util.LuceneVersion.LUCENE_48;
-                var di = new DirectoryInfo(@"C:\Index\");
-                var dir = FSDirectory.Open(di);
-
-
-                var analyzer = new StandardAnalyzer(AppLuceneVersion);
-                var indexConfig = new IndexWriterConfig(AppLuceneVersion, analyzer);
-                var writer = new IndexWriter(dir, indexConfig);
-
-                var searcher = new IndexSearcher(writer.GetReader(applyAllDeletes: true));
-                //var phrase = new FuzzyQuery(new Term("name", id), 0, 0, 10, false);
-                var phrase = new  WildcardQuery(new Term("name", '*' + id + '*'));
-                //phrase.Add(new Term("name", id));
-
-                var hits = searcher.Search(phrase, 20).ScoreDocs;
-                Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
-                foreach (var hit in hits)
-                {
-                    var foundDoc = searcher.Doc(hit.Doc);
-                    Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
-                }
-
-                if (writer.IsClosed == false)
-                {
-                    writer.Dispose();
-                }
+            if (int.TryParse(id, out intId) == false) {
+                var data = _find.WildcardSearch(id);
             }
-
-
 
             Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
             return NotFound();
