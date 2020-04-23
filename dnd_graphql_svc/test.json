@@ -1,0 +1,42 @@
+{
+  "id": 0,
+  "rulebookId": 0,
+  "page": null,
+  "name": null,
+  "schoolId": 0,
+  "subSchoolId": null,
+  "verbalComponent": 0,
+  "somaticComponent": 0,
+  "materialComponent": 0,
+  "arcaneFocusComponent": 0,
+  "divineFocusComponent": 0,
+  "xpComponent": 0,
+  "castingTime": null,
+  "range": null,
+  "target": null,
+  "effect": null,
+  "area": null,
+  "duration": null,
+  "savingThrow": null,
+  "spellResistance": null,
+  "description": null,
+  "slug": null,
+  "search": [
+    {
+      "Key": 1039,
+      "Value": "fell the greatest foe"
+    },
+    {
+      "Key": 1250,
+      "Value": "frostfell slide"
+    },
+    {
+      "Key": 1313,
+      "Value": "frostfell"
+    },
+    {
+      "Key": 3863,
+      "Value": "fell the greatest foe"
+    }
+  ]
+}

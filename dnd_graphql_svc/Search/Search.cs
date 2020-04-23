@@ -26,7 +26,6 @@ namespace dnd_graphql_svc.Search
         
         StandardAnalyzer _analyzer = new StandardAnalyzer(_AppLuceneVersion);
         IndexWriterConfig _indexConfig = null;
-        IndexWriter _writer = null;
 
 
         public void Load()
@@ -55,18 +54,31 @@ namespace dnd_graphql_svc.Search
             if (_indexConfig == null)
                 _indexConfig = new IndexWriterConfig(_AppLuceneVersion, _analyzer);
 
-            if (_writer == null)
-                _writer = new IndexWriter(dir, _indexConfig);
+            var writer = new IndexWriter(dir, _indexConfig);
+            var searcher = new IndexSearcher(writer.GetReader(applyAllDeletes: true));
 
-            var searcher = new IndexSearcher(_writer.GetReader(applyAllDeletes: true));
-            var phrase = new WildcardQuery(new Term("name", '*' + searchTerm + '*'));
+            try
+            {
+                var phrase = new WildcardQuery(new Term("name", '*' + searchTerm + '*'));
+                var hits = searcher.Search(phrase, 20).ScoreDocs;
+                Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
+                foreach (var hit in hits)
+                {
+                    var foundDoc = searcher.Doc(hit.Doc);
+                    Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
+                    results.Add(new KeyValuePair<long, string>(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
+                }
+            }
+            catch (Exception)
+            {
 
-            var hits = searcher.Search(phrase, 20).ScoreDocs;
-            Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
-            foreach (var hit in hits) {
-                var foundDoc = searcher.Doc(hit.Doc);
-                Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
-                results.Add(new KeyValuePair<long, string>(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
+                throw;
+            }
+            finally
+            {
+                searcher = null;
+                writer.Dispose();
+                writer = null;
             }
 
             return results;

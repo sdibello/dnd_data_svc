@@ -16,6 +16,7 @@ using Directory = Lucene.Net.Store.Directory;
 using Lucene.Net.QueryParsers.Classic;
 using System.IO;
 using dnd_graphql_svc.Search;
+using AutoMapper;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -69,10 +70,12 @@ namespace dnd_graphql_svc.Controllers
         // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFra meworkCore.Sqlite
         // GET: api/Spells/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DndSpell>> GetSpell(string id)
+        public async Task<ActionResult<Spell>> GetSpell(string id)
         {
             int intId;
             DndSpell spelldb;
+            Spell spell = new Spell();
+            List<KeyValuePair<long, String>> searchresults;
 
             if (int.TryParse(id, out intId) == true)
             {
@@ -85,18 +88,34 @@ namespace dnd_graphql_svc.Controllers
                 }
             }
 
-            if (spelldb != null)
+            if (spelldb!= null)
+            {
+                //replace with automapper.
+                spell.Id = spelldb.Id;
+                spell.Description = spelldb.Description;
+                spell.Name = spelldb.Name;
+                spell.CastingTime = spelldb.CastingTime;
+                spell.Range = spelldb.Range;
+                spell.SavingThrow = spelldb.SavingThrow;
+                spell.SpellResistance = spelldb.SpellResistance;
+                spell.Duration = spelldb.Duration;
+                spell.Target = spelldb.Target;
+                spell.Slug = spelldb.Slug;
+            }
+
+            if (spell.Id > 0)
             {
                 Console.WriteLine(string.Format("log - get spell - ({0}) name = {1}", id, spelldb.Name));
-                return spelldb;
+                return spell;
             };
 
             if (int.TryParse(id, out intId) == false) {
-                var data = _find.WildcardSearch(id);
+                searchresults = _find.WildcardSearch(id);
+                spell.search = searchresults;
             }
 
             Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
-            return NotFound();
+            return spell;
         }
 
         [HttpGet("{id}/index")]
