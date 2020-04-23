@@ -75,7 +75,7 @@ namespace dnd_graphql_svc.Controllers
             int intId;
             DndSpell spelldb;
             Spell spell = new Spell();
-            List<KeyValuePair<long, String>> searchresults;
+            List<dto.SpellSearch> searchresults;
 
             if (int.TryParse(id, out intId) == true)
             {
@@ -137,9 +137,10 @@ namespace dnd_graphql_svc.Controllers
             {
                 Document doc = new Document
                 {
-                    new StringField("name", spell.Name.ToLower(),Field.Store.YES),
+                    new StringField("name", spell.Name,Field.Store.YES),
+                    new StringField("search_name", spell.Name.ToLower(),Field.Store.YES),
                     new StringField("id", spell.Id.ToString(),Field.Store.YES),
-                    new StringField("desc", spell.Description.ToLower(),Field.Store.YES),
+                    //new StringField("desc", spell.Description.ToLower(),Field.Store.YES),
                     new StringField("slug", spell.Slug.ToLower(),Field.Store.YES),
                 };
 

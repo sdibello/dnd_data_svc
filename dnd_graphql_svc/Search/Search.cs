@@ -44,9 +44,9 @@ namespace dnd_graphql_svc.Search
             var writer = new IndexWriter(dir, indexConfig);
         }
 
-        public List<KeyValuePair<long, string>> WildcardSearch(string searchTerm)
+        public List<dto.SpellSearch> WildcardSearch(string searchTerm)
         {
-            List<KeyValuePair<long, string>> results = new List<KeyValuePair<long, string>>();
+            List<dto.SpellSearch> results = new List<dto.SpellSearch>();
 
             var di = new DirectoryInfo(_indexPath);
             var dir = FSDirectory.Open(di);
@@ -59,14 +59,15 @@ namespace dnd_graphql_svc.Search
 
             try
             {
-                var phrase = new WildcardQuery(new Term("name", '*' + searchTerm + '*'));
+                // search name is lower case, to make thing seasier.
+                var phrase = new WildcardQuery(new Term("search_name", '*' + searchTerm + '*'));
                 var hits = searcher.Search(phrase, 20).ScoreDocs;
                 Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
                 foreach (var hit in hits)
                 {
                     var foundDoc = searcher.Doc(hit.Doc);
                     Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
-                    results.Add(new KeyValuePair<long, string>(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
+                    results.Add(new dto.SpellSearch(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
                 }
             }
             catch (Exception)

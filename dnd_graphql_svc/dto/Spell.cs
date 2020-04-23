@@ -29,6 +29,19 @@ namespace dnd_graphql_svc.dto
         public string SpellResistance { get; set; }
         public string Description { get; set; }
         public string Slug { get; set; }
-        public List<KeyValuePair<long, String>> search { get; set; }
+        public List<SpellSearch> search { get; set; }
+    }
+
+    public class SpellSearch
+    { 
+        public long id { get; set; }
+        public string name { get; set; }
+
+        public SpellSearch(long id, String name)
+        {
+            this.id = id;
+            this.name = name;
+        }
+
     }
 }
