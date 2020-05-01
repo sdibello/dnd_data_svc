@@ -153,5 +153,38 @@ namespace dnd_graphql_svc.Controllers
             return NotFound();
         }
 
+        [HttpGet("{casterClass}/{casterlevel}")]
+        public async Task<ActionResult<List<SpellClassLevel>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
+        {
+            var preQuery = _context.DndCharacterclass.Where(cc => cc.Slug == casterClass.ToLower()).ToList();
+
+            var cclass = preQuery.FirstOrDefault();
+
+            var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == cclass.Id && scl.Level == long.Parse(casterlevel))
+                .Join(
+                    _context.DndCharacterclass,
+                    cl => cl.CharacterClassId,
+                    cc => cc.Id,
+                    (cl, cc) => new SpellClassLevel
+                    {
+                        SpellId = cl.SpellId,
+                        ClassId = cc.Id,
+                        Level = cl.Level,
+                        ClassName = cc.Name
+                    })
+                .OrderBy(g => g.ClassId)
+                .ToList();
+
+            if (query != null)
+            {
+                Console.WriteLine(string.Format("log - get spell class - id = {0}", casterClass));
+                return query;
+            };
+
+            Console.WriteLine(string.Format("log - get spell class - id = {0}", casterClass));
+            return NotFound();
+        }
+
+
     }
 }
