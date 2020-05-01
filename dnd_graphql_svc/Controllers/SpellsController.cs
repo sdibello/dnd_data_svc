@@ -162,15 +162,28 @@ namespace dnd_graphql_svc.Controllers
 
             var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == cclass.Id && scl.Level == long.Parse(casterlevel))
                 .Join(
+                    _context.DndSpell,
+                    cl => cl.SpellId,
+                    s => s.Id,
+                    (cl, s) => new SpellClassLevel
+                    {
+                        SpellId = s.Id,
+                        ClassId = cl.CharacterClassId,
+                        Level = cl.Level,
+                        SpellName = s.Name
+                    }
+                )
+                .Join(
                     _context.DndCharacterclass,
-                    cl => cl.CharacterClassId,
+                    cl => cl.ClassId,
                     cc => cc.Id,
                     (cl, cc) => new SpellClassLevel
                     {
                         SpellId = cl.SpellId,
                         ClassId = cc.Id,
                         Level = cl.Level,
-                        ClassName = cc.Name
+                        ClassName = cc.Name,
+                        SpellName = cl.SpellName
                     })
                 .OrderBy(g => g.ClassId)
                 .ToList();

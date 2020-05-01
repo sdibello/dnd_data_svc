@@ -11,5 +11,6 @@ namespace dnd_graphql_svc.dto
         public long ClassId { get; set; }
         public long Level { get; set; }
         public string ClassName { get; set; }
+        public string SpellName { get; set; }
     }
 }
