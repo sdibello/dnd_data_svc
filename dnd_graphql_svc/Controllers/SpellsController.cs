@@ -188,13 +188,12 @@ namespace dnd_graphql_svc.Controllers
                 .OrderBy(g => g.ClassId)
                 .ToList();
 
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - casterClass = {0}/{1}", casterClass, casterlevel));
             if (query != null)
             {
-                Console.WriteLine(string.Format("log - get spell class - id = {0}", casterClass));
                 return query;
             };
 
-            Console.WriteLine(string.Format("log - get spell class - id = {0}", casterClass));
             return NotFound();
         }
 

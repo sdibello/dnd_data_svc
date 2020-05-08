@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnd_graphql_svc", "dnd_graphql_svc.csproj", "{CD3A8CA4-601E-4A02-AC8E-7E8ABDACCBA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnd_graphql_svc", "dnd_graphql_svc.csproj", "{CD3A8CA4-601E-4A02-AC8E-7E8ABDACCBA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnd_dal", "..\dnd_dal\dnd_dal.csproj", "{4FE8F007-F7EC-4D8A-BF40-C545B2DE7763}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnd_dal", "..\dnd_dal\dnd_dal.csproj", "{4FE8F007-F7EC-4D8A-BF40-C545B2DE7763}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnd_svc_test", "..\dnd_svc_test\dnd_svc_test.csproj", "{DAC73EA7-661D-48F4-B874-EAF79D8FA497}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4FE8F007-F7EC-4D8A-BF40-C545B2DE7763}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FE8F007-F7EC-4D8A-BF40-C545B2DE7763}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FE8F007-F7EC-4D8A-BF40-C545B2DE7763}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAC73EA7-661D-48F4-B874-EAF79D8FA497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC73EA7-661D-48F4-B874-EAF79D8FA497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC73EA7-661D-48F4-B874-EAF79D8FA497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC73EA7-661D-48F4-B874-EAF79D8FA497}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

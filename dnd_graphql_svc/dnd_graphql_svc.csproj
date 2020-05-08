@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\SpellsController.cs~RF19ff11d0.TMP" />
     <None Remove="Data\dnd.sqlite" />
   </ItemGroup>
 
