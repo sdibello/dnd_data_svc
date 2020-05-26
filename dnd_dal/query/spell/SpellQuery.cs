@@ -27,9 +27,16 @@ namespace dnd_dal.query.spell
         /// <returns>A list of SpellClassLevels </returns>
         public List<SpellClassLevel> ByClassAndLevel(string CasterClass, string CasterLevel)
         {
+            Console.WriteLine(string.Format("log - SpellQuery - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
             var preQuery = _context.DndCharacterclass.Where(cc => cc.Slug == CasterClass.ToLower()).ToList();
 
             var cclass = preQuery.FirstOrDefault();
+
+            if (cclass == null)
+            {
+                Console.WriteLine(string.Format("log - SpellQuery - ByClassAndLevel - Character Class Not Found", CasterClass, CasterLevel));
+                return null;
+            }
 
             var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == cclass.Id && scl.Level == long.Parse(CasterLevel))
                 .Join(
@@ -59,12 +66,13 @@ namespace dnd_dal.query.spell
                 .OrderBy(g => g.ClassId)
                 .ToList();
 
-            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - casterClass = {0}/{1}", CasterClass, CasterLevel));
             if (query != null)
             {
+                Console.WriteLine(string.Format("log - SpellQuery - ByClassAndLevel - ByClassAndLevel results {0}", query.Count()));
                 return query;
             };
 
+            Console.WriteLine(string.Format("log - SpellQuery - ByClassAndLevel - Not Spells Found", CasterClass, CasterLevel));
             return null;
         }
 
