@@ -17,6 +17,8 @@ using Lucene.Net.QueryParsers.Classic;
 using System.IO;
 using dnd_graphql_svc.Search;
 using AutoMapper;
+using dnd_dal.query.spell;
+using dnd_dal.dto;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -75,7 +77,7 @@ namespace dnd_graphql_svc.Controllers
             int intId;
             DndSpell spelldb;
             Spell spell = new Spell();
-            List<dto.SpellSearch> searchresults;
+            List<SpellSearch> searchresults;
 
             if (int.TryParse(id, out intId) == true)
             {
@@ -156,44 +158,49 @@ namespace dnd_graphql_svc.Controllers
         [HttpGet("{casterClass}/{casterlevel}")]
         public async Task<ActionResult<List<SpellClassLevel>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
         {
-            var preQuery = _context.DndCharacterclass.Where(cc => cc.Slug == casterClass.ToLower()).ToList();
 
-            var cclass = preQuery.FirstOrDefault();
+            var query = new SpellQuery(_context);
+            var results = query.ByClassAndLevel(casterClass, casterlevel);
 
-            var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == cclass.Id && scl.Level == long.Parse(casterlevel))
-                .Join(
-                    _context.DndSpell,
-                    cl => cl.SpellId,
-                    s => s.Id,
-                    (cl, s) => new SpellClassLevel
-                    {
-                        SpellId = s.Id,
-                        ClassId = cl.CharacterClassId,
-                        Level = cl.Level,
-                        SpellName = s.Name
-                    }
-                )
-                .Join(
-                    _context.DndCharacterclass,
-                    cl => cl.ClassId,
-                    cc => cc.Id,
-                    (cl, cc) => new SpellClassLevel
-                    {
-                        SpellId = cl.SpellId,
-                        ClassId = cc.Id,
-                        Level = cl.Level,
-                        ClassName = cc.Name,
-                        SpellName = cl.SpellName
-                    })
-                .OrderBy(g => g.ClassId)
-                .ToList();
+            //var preQuery = _context.DndCharacterclass.Where(cc => cc.Slug == casterClass.ToLower()).ToList();
 
-            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - casterClass = {0}/{1}", casterClass, casterlevel));
-            if (query != null)
+            //var cclass = preQuery.FirstOrDefault();
+
+            //var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == cclass.Id && scl.Level == long.Parse(casterlevel))
+            //    .Join(
+            //        _context.DndSpell,
+            //        cl => cl.SpellId,
+            //        s => s.Id,
+            //        (cl, s) => new SpellClassLevel
+            //        {
+            //            SpellId = s.Id,
+            //            ClassId = cl.CharacterClassId,
+            //            Level = cl.Level,
+            //            SpellName = s.Name
+            //        }
+            //    )
+            //    .Join(
+            //        _context.DndCharacterclass,
+            //        cl => cl.ClassId,
+            //        cc => cc.Id,
+            //        (cl, cc) => new SpellClassLevel
+            //        {
+            //            SpellId = cl.SpellId,
+            //            ClassId = cc.Id,
+            //            Level = cl.Level,
+            //            ClassName = cc.Name,
+            //            SpellName = cl.SpellName
+            //        })
+            //    .OrderBy(g => g.ClassId)
+            //    .ToList();
+
+            if (results != null)
             {
-                return query;
+                Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - casterClass = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
+                return results;
             };
 
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - casterClass = {0}/{1} - NOT FOUND", casterClass, casterlevel));
             return NotFound();
         }
 

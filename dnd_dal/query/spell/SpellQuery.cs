@@ -4,11 +4,16 @@ using System.Text;
 using System.Linq;
 using dnd_dal.dto;
 
-namespace dnd_dal.query.spells
-{
-    class SpellsQuery
+namespace dnd_dal.query.spell
+{ 
+    public class SpellQuery
     {
         private readonly dndContext _context;
+
+        public SpellQuery(dndContext context)
+        {
+            _context = context;
+        }
 
         //TODO - create a byClassAndLevel by int, int, and string, int
         //TODO 
@@ -20,7 +25,7 @@ namespace dnd_dal.query.spells
         /// <param name="CasterClass">string value of the character class</param>
         /// <param name="CasterLevel">string value of the character level</param>
         /// <returns>A list of SpellClassLevels </returns>
-        public List<SpellClassLevel> ByClassAndLevel(dndContext context, string CasterClass, string CasterLevel)
+        public List<SpellClassLevel> ByClassAndLevel(string CasterClass, string CasterLevel)
         {
             var preQuery = _context.DndCharacterclass.Where(cc => cc.Slug == CasterClass.ToLower()).ToList();
 
@@ -62,5 +67,6 @@ namespace dnd_dal.query.spells
 
             return null;
         }
+
     }
 }

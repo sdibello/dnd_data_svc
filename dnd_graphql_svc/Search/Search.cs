@@ -16,6 +16,7 @@ using Lucene.Net.QueryParsers;
 using Directory = Lucene.Net.Store.Directory;
 using Lucene.Net.QueryParsers.Classic;
 using System.IO;
+using dnd_dal.dto;
 
 namespace dnd_graphql_svc.Search
 {
@@ -44,9 +45,9 @@ namespace dnd_graphql_svc.Search
             var writer = new IndexWriter(dir, indexConfig);
         }
 
-        public List<dto.SpellSearch> WildcardSearch(string searchTerm)
+        public List<SpellSearch> WildcardSearch(string searchTerm)
         {
-            List<dto.SpellSearch> results = new List<dto.SpellSearch>();
+            List<SpellSearch> results = new List<SpellSearch>();
 
             var di = new DirectoryInfo(_indexPath);
             var dir = FSDirectory.Open(di);
@@ -67,7 +68,7 @@ namespace dnd_graphql_svc.Search
                 {
                     var foundDoc = searcher.Doc(hit.Doc);
                     Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
-                    results.Add(new dto.SpellSearch(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
+                    results.Add(new SpellSearch(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
                 }
             }
             catch (Exception)
