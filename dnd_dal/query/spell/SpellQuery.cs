@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using dnd_dal.dto;
+using Microsoft.EntityFrameworkCore.Sqlite.Scaffolding.Internal;
 
 namespace dnd_dal.query.spell
-{ 
+{
     public class SpellQuery
     {
         private readonly dndContext _context;
@@ -76,5 +77,35 @@ namespace dnd_dal.query.spell
             return null;
         }
 
+        public List<SpellSchoolSubSchool> SchoolBySpell(string SpellId)
+        {
+            Console.WriteLine(string.Format("log - SchoolBySpell - PARAMS {0}", SpellId));
+
+
+            var query = _context.DndSpell.Where(s => s.Id == int.Parse(SpellId))
+                .Join(
+                    _context.DndSpellschool,
+                    spell => spell.SchoolId,
+                    spellschool => spellschool.Id,
+                    (spell, spellschool) => new SpellSchoolSubSchool
+                    {
+                        SpellId = spell.Id,
+                        SchoolId = spell.SchoolId,
+                        SchoolName = spellschool.Name,
+                        SubSchoolId = spell.SubSchoolId
+                    }
+                ).ToList();
+
+            //Sqlcode = query.ToSql();
+
+            if (query != null)
+            {
+                Console.WriteLine(string.Format("log - SpellQuery - ByClassAndLevel - SchoolBySpell results {0}", query.Count()));
+                return query;
+            };
+
+            return null;
+            //}
+        }
     }
 }
