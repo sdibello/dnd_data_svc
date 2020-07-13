@@ -102,6 +102,14 @@ namespace dnd_graphql_svc.Controllers
                 spell.Duration = spelldb.Duration;
                 spell.Target = spelldb.Target;
                 spell.Slug = spelldb.Slug;
+                spell.SubSchoolId = spelldb.SubSchoolId;
+                spell.SchoolId = spelldb.SchoolId;
+                spell.ArcaneFocusComponent = spelldb.ArcaneFocusComponent;
+                spell.DivineFocusComponent = spelldb.DivineFocusComponent;
+                spell.MaterialComponent = spelldb.MaterialComponent;
+                spell.SomaticComponent = spelldb.SomaticComponent;
+                spell.VerbalComponent = spelldb.VerbalComponent;
+                spell.XpComponent = spelldb.XpComponent;
             }
 
             //var school = Query.SchoolBySpell(id);
@@ -125,12 +133,11 @@ namespace dnd_graphql_svc.Controllers
         /// This should return the list of schools of a particular spell
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{id}/schools")]
+        [HttpGet("{id}/school")]
         public ActionResult<List<SpellSchoolSubSchool>> Schools(int id)
         {
-             var query = new SpellQuery(_context);
+            var query = new SpellQuery(_context);
             var results = query.SchoolBySpell(id.ToString());
-            //var results = _context.DndSpell.Where(x => x.Id == id);
             if (results != null)
             {
                 if (results.Count() != 0)
