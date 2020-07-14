@@ -129,30 +129,43 @@ namespace dnd_graphql_svc.Controllers
             return spell;
         }
 
-        /// <summary>
-        /// This should return the list of schools of a particular spell
-        /// </summary>
-        /// <returns></returns>
         [HttpGet("{id}/school")]
-        public ActionResult<List<SpellSchoolSubSchool>> Schools(int id)
+        public ActionResult<List<SpellSchoolSubSchool>> Schools(string id)
         {
+            int intId;
             var query = new SpellQuery(_context);
-            var results = query.SchoolBySpell(id.ToString());
-            if (results != null)
+            List<SpellSchoolSubSchool> results;
+
+
+            if (int.TryParse(id, out intId) == true)
             {
-                if (results.Count() != 0)
+                results = query.SchoolBySpell(intId);
+            }
+            else
+            {
+                if (id.IndexOf(' ') > 0)
                 {
-                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - returned {0} results", results.Count()));
-                    return results;
+                    results = query.SchoolBySpell(id);
                 }
                 else
                 {
-                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - NO RESULTS"));
-                    return NotFound();
+                    results = query.SchoolBySpell(id);
                 }
-            };
+            }
 
-            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - NO RESULTS"));
+
+
+            //var results = query.SchoolBySpell(slug);
+            if (results != null)
+            {
+                Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - returned {0} results", results.Count()));
+                return results;
+            }
+            else
+            {
+                Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - NULL"));
+            }
+
             return NotFound();
         }
 
