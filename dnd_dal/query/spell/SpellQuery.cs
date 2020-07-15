@@ -17,8 +17,7 @@ namespace dnd_dal.query.spell
             _context = context;
         }
 
-        //TODO - create a byClassAndLevel by int, int, and string, int
-        //TODO 
+        #region SpellsByClassAndLevel 
 
         /// <summary>
         ///   Pull a list of "SpellClassLewvels items from the database, which lists all spells by class level.
@@ -78,6 +77,9 @@ namespace dnd_dal.query.spell
             return null;
         }
 
+        #endregion
+
+        #region Spell School
 
         private List<SpellSchoolSubSchool> schoolsBySlug(string slug)
         {
@@ -144,6 +146,8 @@ namespace dnd_dal.query.spell
             }
 
             return null;
-        }    
+        }
+
+        #endregion
     }
 }

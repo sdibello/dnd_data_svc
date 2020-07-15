@@ -181,28 +181,30 @@ namespace dnd_graphql_svc.Controllers
             return NotFound();
         }
 
-        //[HttpGet("{casterClass}/{casterlevel}")]
-        //public async Task<ActionResult<List<SpellClassLevel>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
-        //{
+        [HttpGet("{casterClass}/{casterlevel}")]
+        public async Task<ActionResult<List<SpellClassLevel>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
+        {
 
-        //    var query = new SpellQuery(_context);
-        //    var results = query.ByClassAndLevel(casterClass, casterlevel);
+            var query = new SpellQuery(_context);
+            var results = query.ByClassAndLevel(casterClass, casterlevel);
 
-        //    if (results != null)
-        //    {
-        //        if (results.Count != 0)
-        //        {
-        //            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
-        //            return results;
-        //        } else {
-        //            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
-        //            return NotFound();
-        //        }
-        //    };
+            if (results != null)
+            {
+                if (results.Count != 0)
+                {
+                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
+                    return results;
+                }
+                else
+                {
+                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
+                    return NotFound();
+                }
+            };
 
-        //    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
-        //    return NotFound();
-        //}
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
+            return NotFound();
+        }
 
 
     }
