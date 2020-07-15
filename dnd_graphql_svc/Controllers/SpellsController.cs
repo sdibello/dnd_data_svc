@@ -25,14 +25,13 @@ namespace dnd_graphql_svc.Controllers
     [Route("/api/v1/[controller]")]
     public class SpellsController : Controller
     {
+        private readonly dndContext _context;
         public Search.Search _find;
 
         public IActionResult Index()
         {
             return View();
         }
-
-        private readonly dndContext _context;
 
         public SpellsController(dndContext context)
         {
@@ -130,42 +129,20 @@ namespace dnd_graphql_svc.Controllers
         }
 
         [HttpGet("{id}/school")]
-        public ActionResult<List<SpellSchoolSubSchool>> Schools(string id)
+        public ActionResult<List<SpellSchoolSubSchool>> School(string id)
         {
-            int intId;
             var query = new SpellQuery(_context);
             List<SpellSchoolSubSchool> results;
 
-
-            if (int.TryParse(id, out intId) == true)
-            {
-                results = query.SchoolBySpell(intId);
-            }
-            else
-            {
-                if (id.IndexOf(' ') > 0)
-                {
-                    results = query.SchoolBySpell(id);
-                }
-                else
-                {
-                    results = query.SchoolBySpell(id);
-                }
-            }
-
-
-
-            //var results = query.SchoolBySpell(slug);
+            results = query.SchoolBySpell(id);
+ 
             if (results != null)
             {
                 Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - returned {0} results", results.Count()));
                 return results;
             }
-            else
-            {
-                Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - NULL"));
-            }
 
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - 404 Not found"));
             return NotFound();
         }
 
