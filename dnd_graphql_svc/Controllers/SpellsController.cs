@@ -40,27 +40,15 @@ namespace dnd_graphql_svc.Controllers
         }
 
         [HttpGet("{id}/class")]
-        public async Task<ActionResult<List<SpellClassLevel>>> GetSpellClassLevel(int id)
+        public async Task<ActionResult<List<SpellClassLevel>>> GetSpellClassLevel(long id)
         {
+            var query = new SpellQuery(_context);
+            List<SpellClassLevel> data = query.ClassAndLevelBySpell(id);
 
-            var query = _context.DndSpellclasslevel.Where(scl => scl.SpellId == id)
-                .Join(
-                    _context.DndCharacterclass,
-                    cl => cl.CharacterClassId,
-                    cc => cc.Id,
-                    (cl, cc) => new SpellClassLevel {
-                        SpellId = cl.SpellId,
-                        ClassId = cc.Id,
-                        Level = cl.Level,
-                        ClassName = cc.Name
-                    })
-                .OrderBy( g => g.ClassId)
-                .ToList();
-
-            if (query != null)
+            if (data != null)
             {
                 Console.WriteLine(string.Format("log - get spell class - id = {0}", id));  
-                return query;
+                return data;
             };
 
             Console.WriteLine(string.Format("log - get spell class - id = {0}", id));
@@ -186,7 +174,7 @@ namespace dnd_graphql_svc.Controllers
         {
 
             var query = new SpellQuery(_context);
-            var results = query.ByClassAndLevel(casterClass, casterlevel);
+            var results = query.SpellsByClassAndLevel(casterClass, casterlevel);
 
             if (results != null)
             {
