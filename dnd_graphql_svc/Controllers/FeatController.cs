@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using dnd_dal;
 using dnd_graphql_svc.dto;
 using System.Web;
+using dnd_dal.query.feat;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,10 +24,12 @@ namespace dnd_graphql_svc.Controllers
         }
 
         private readonly dndContext _context;
+        private FeatQuery _query;
 
         public FeatController(dndContext context)
         {
             _context = context;
+            var query = new FeatQuery(_context);
         }
 
         [HttpGet("{id}")]
@@ -54,7 +57,7 @@ namespace dnd_graphql_svc.Controllers
                 return featdb;
             };
 
-            Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
+            Console.WriteLine(string.Format("log - get feat - ({0}) - 404, not found", id));
             return NotFound();
         }
 
