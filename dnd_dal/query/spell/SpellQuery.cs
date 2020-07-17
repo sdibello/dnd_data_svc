@@ -68,11 +68,11 @@ namespace dnd_dal.query.spell
             var query = Query_ClassAndLevelBySpell(spellId);
 
             if (query != null) {
-                Console.WriteLine(string.Format("log - ClassAndLevelBySpell - ByClassAndLevel - ByClassAndLevel results {0}", query.Count()));
+                Console.WriteLine(string.Format("log - ClassAndLevelBySpell - ByClassAndLevel results {0}", query.Count()));
                 return query;
             };
 
-            Console.WriteLine(string.Format("log - ClassAndLevelBySpell - ByClassAndLevel - Not Spells Found"));
+            Console.WriteLine(string.Format("log - ClassAndLevelBySpell - Not Spells Found"));
             return null;
         }
 
@@ -87,7 +87,7 @@ namespace dnd_dal.query.spell
         {
             long llevel;
 
-            Console.WriteLine(string.Format("log - SpellsByClassAndLevel - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
+            Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
 
             if (long.TryParse(CasterLevel, out llevel))
             {
@@ -95,12 +95,12 @@ namespace dnd_dal.query.spell
 
                 if (query != null)
                 {
-                    Console.WriteLine(string.Format("log - SpellsByClassAndLevel - ByClassAndLevel - ByClassAndLevel results {0}", query.Count()));
+                    Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel - ByClassAndLevel results {0}", query.Count()));
                     return query;
                 };
             }
 
-            Console.WriteLine(string.Format("log - SpellsByClassAndLevel - ByClassAndLevel - Not Spells Found", CasterClass, CasterLevel));
+            Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel - Not Spells Found", CasterClass, CasterLevel));
             return null;
         }
 
@@ -167,7 +167,7 @@ namespace dnd_dal.query.spell
         /// <returns></returns>
         public List<SpellSchoolSubSchool> SchoolBySpell(string parameter)
         {
-            Console.WriteLine(string.Format("log - SchoolBySpell - PARAMS {0}", parameter));
+            Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - PARAMS {0}", parameter));
 
             try
             {
@@ -178,7 +178,7 @@ namespace dnd_dal.query.spell
                     data = Query_schoolsBySlug(parameter);
 
                 if (data != null) {
-                    Console.WriteLine(string.Format("log - SpellQuery - ByClassAndLevel - SchoolBySpell results {0}", data.Count()));
+                    Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - results {0}", data.Count()));
                     return data;
                 };
             }
