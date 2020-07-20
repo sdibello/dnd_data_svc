@@ -6,6 +6,7 @@ using dnd_dal.dto;
 using Microsoft.EntityFrameworkCore.Sqlite.Scaffolding.Internal;
 using System.Security.Cryptography;
 using Lucene.Net.Index;
+using System.Web;
 
 namespace dnd_dal.query.spell
 {
@@ -134,6 +135,27 @@ namespace dnd_dal.query.spell
             return query.ToList();
         }
 
+        private List<SpellSchoolSubSchool> Query_schoolsByName(string slug)
+        {
+            var query =
+                    from spell in _context.DndSpell
+                    join spellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SchoolId equals spellschool.Id into ss
+                    from ssr in ss.DefaultIfEmpty()
+                    join subspellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SubSchoolId equals subspellschool.Id into subss
+                    from subssr in subss.DefaultIfEmpty()
+                    where spell.Name.ToLower() == slug.ToLower()
+                    select new SpellSchoolSubSchool
+                    {
+                        SpellId = spell.Id,
+                        SchoolId = ssr.Id,
+                        SchoolName = ssr.Name,
+                        SubSchoolId = subssr.Id,
+                        SubSchoolName = subssr.Name
+                    };
+
+            return query.ToList();
+        }
+
         /// <summary>
         /// Retruns a list of spell schools by spell ID
         /// </summary>
@@ -175,7 +197,11 @@ namespace dnd_dal.query.spell
                 if (long.TryParse(parameter, out long longId))
                     data = Query_schoolsById(longId);
                 else
-                    data = Query_schoolsBySlug(parameter);
+                    if (HttpUtility.UrlDecode(parameter).IndexOf(' ')>0) {
+                        data = Query_schoolsByName(parameter);
+                    } else {
+                        data = Query_schoolsBySlug(parameter);
+                    }
 
                 if (data != null) {
                     Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - results {0}", data.Count()));
