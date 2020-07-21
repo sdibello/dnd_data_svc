@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using dnd_dal;
-using dnd_graphql_svc.dto;
 using System.Web;
 using Lucene.Net.Store;
 using Lucene.Net.Analysis.Standard;
@@ -17,6 +16,8 @@ using Lucene.Net.QueryParsers.Classic;
 using System.IO;
 using dnd_graphql_svc.Search;
 using AutoMapper;
+using dnd_dal.query.spell;
+using dnd_dal.dto;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -24,14 +25,13 @@ namespace dnd_graphql_svc.Controllers
     [Route("/api/v1/[controller]")]
     public class SpellsController : Controller
     {
+        private readonly dndContext _context;
         public Search.Search _find;
 
         public IActionResult Index()
         {
             return View();
         }
-
-        private readonly dndContext _context;
 
         public SpellsController(dndContext context)
         {
@@ -40,27 +40,15 @@ namespace dnd_graphql_svc.Controllers
         }
 
         [HttpGet("{id}/class")]
-        public async Task<ActionResult<List<SpellClassLevel>>> GetSpellClassLevel(int id)
+        public async Task<ActionResult<List<SpellClassLevel>>> GetSpellClassLevel(long id)
         {
+            var query = new SpellQuery(_context);
+            List<SpellClassLevel> data = query.ClassAndLevelBySpell(id);
 
-            var query = _context.DndSpellclasslevel.Where(scl => scl.SpellId == id)
-                .Join(
-                    _context.DndCharacterclass,
-                    cl => cl.CharacterClassId,
-                    cc => cc.Id,
-                    (cl, cc) => new SpellClassLevel {
-                        SpellId = cl.SpellId,
-                        ClassId = cc.Id,
-                        Level = cl.Level,
-                        ClassName = cc.Name
-                    })
-                .OrderBy( g => g.ClassId)
-                .ToList();
-
-            if (query != null)
+            if (data != null)
             {
                 Console.WriteLine(string.Format("log - get spell class - id = {0}", id));  
-                return query;
+                return data;
             };
 
             Console.WriteLine(string.Format("log - get spell class - id = {0}", id));
@@ -75,7 +63,7 @@ namespace dnd_graphql_svc.Controllers
             int intId;
             DndSpell spelldb;
             Spell spell = new Spell();
-            List<dto.SpellSearch> searchresults;
+            List<SpellSearch> searchresults;
 
             if (int.TryParse(id, out intId) == true)
             {
@@ -101,7 +89,17 @@ namespace dnd_graphql_svc.Controllers
                 spell.Duration = spelldb.Duration;
                 spell.Target = spelldb.Target;
                 spell.Slug = spelldb.Slug;
+                spell.SubSchoolId = spelldb.SubSchoolId;
+                spell.SchoolId = spelldb.SchoolId;
+                spell.ArcaneFocusComponent = spelldb.ArcaneFocusComponent;
+                spell.DivineFocusComponent = spelldb.DivineFocusComponent;
+                spell.MaterialComponent = spelldb.MaterialComponent;
+                spell.SomaticComponent = spelldb.SomaticComponent;
+                spell.VerbalComponent = spelldb.VerbalComponent;
+                spell.XpComponent = spelldb.XpComponent;
             }
+
+            //var school = Query.SchoolBySpell(id);
 
             if (spell.Id > 0)
             {
@@ -116,6 +114,24 @@ namespace dnd_graphql_svc.Controllers
 
             Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
             return spell;
+        }
+
+        [HttpGet("{id}/school")]
+        public ActionResult<List<SpellSchoolSubSchool>> School(string id)
+        {
+            var query = new SpellQuery(_context);
+            List<SpellSchoolSubSchool> results;
+
+            results = query.SchoolBySpell(id);
+ 
+            if (results != null)
+            {
+                Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - returned {0} results", results.Count()));
+                return results;
+            }
+
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - 404 Not found"));
+            return NotFound();
         }
 
         [HttpGet("{id}/index")]
@@ -156,32 +172,25 @@ namespace dnd_graphql_svc.Controllers
         [HttpGet("{casterClass}/{casterlevel}")]
         public async Task<ActionResult<List<SpellClassLevel>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
         {
-            var preQuery = _context.DndCharacterclass.Where(cc => cc.Slug == casterClass.ToLower()).ToList();
 
-            var cclass = preQuery.FirstOrDefault();
+            var query = new SpellQuery(_context);
+            var results = query.SpellsByClassAndLevel(casterClass, casterlevel);
 
-            var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == cclass.Id && scl.Level == long.Parse(casterlevel))
-                .Join(
-                    _context.DndCharacterclass,
-                    cl => cl.CharacterClassId,
-                    cc => cc.Id,
-                    (cl, cc) => new SpellClassLevel
-                    {
-                        SpellId = cl.SpellId,
-                        ClassId = cc.Id,
-                        Level = cl.Level,
-                        ClassName = cc.Name
-                    })
-                .OrderBy(g => g.ClassId)
-                .ToList();
-
-            if (query != null)
+            if (results != null)
             {
-                Console.WriteLine(string.Format("log - get spell class - id = {0}", casterClass));
-                return query;
+                if (results.Count != 0)
+                {
+                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
+                    return results;
+                }
+                else
+                {
+                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
+                    return NotFound();
+                }
             };
 
-            Console.WriteLine(string.Format("log - get spell class - id = {0}", casterClass));
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
             return NotFound();
         }
 

@@ -38,10 +38,8 @@ namespace dnd_graphql_svc.Controllers
             if (int.TryParse(id, out intId) == true)
             {
                 data = _context.DndCharacterclass.Where(x => x.Id == intId).FirstOrDefault();
-            }
-            else
-            {
-                data = _context.DndCharacterclass.Where(x => x.Slug == id).FirstOrDefault();
+            } else {
+                data = _context.DndCharacterclass.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
             }
 
             if (data != null)

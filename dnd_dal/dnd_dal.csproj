@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;linux</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="query\spell\SpellQuery.cs~RFa5259278.TMP" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00007" />

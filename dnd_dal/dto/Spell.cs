@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace dnd_graphql_svc.dto
+namespace dnd_dal.dto
 {
     public class Spell
     {

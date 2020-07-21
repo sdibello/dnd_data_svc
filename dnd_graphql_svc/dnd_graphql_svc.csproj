@@ -5,9 +5,11 @@
     <UserSecretsId>d271bf92-b477-4dda-9684-1f22886cb781</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <Configurations>Debug;Release;linux</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\SpellsController.cs~RF19ff11d0.TMP" />
     <None Remove="Data\dnd.sqlite" />
   </ItemGroup>
 
