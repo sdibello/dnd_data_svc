@@ -114,43 +114,39 @@ namespace dnd_dal.query.spell
         /// </summary>
         /// <param name="slug">slug of a spell</param>
         /// <returns>a list of SpellSchoolSubShool objects</returns>
-        private List<SpellSchoolSubSchool> Query_schoolsBySlug(string slug)
+        public List<DndSpellschool> Query_schoolsBySlug(string slug)
         {
             var query =
-                    from spell in _context.DndSpell
-                    join spellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SchoolId equals spellschool.Id into ss
-                    from ssr in ss.DefaultIfEmpty()
-                    join subspellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SubSchoolId equals subspellschool.Id into subss
-                    from subssr in subss.DefaultIfEmpty()
-                    where spell.Slug.ToLower() == slug.ToLower()
-                    select new SpellSchoolSubSchool
+                    from spellschool in _context.DndSpellschool
+                    join spell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals spell.SchoolId into si
+                    from s in si.DefaultIfEmpty()
+                    join subspell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals subspell.SubSchoolId into sii
+                    from ssub in sii.DefaultIfEmpty()
+                    where s.Slug.ToLower() == slug.ToLower()
+                    select new DndSpellschool
                     {
-                        SpellId = spell.Id,
-                        SchoolId = ssr.Id,
-                        SchoolName = ssr.Name,
-                        SubSchoolId = subssr.Id,
-                        SubSchoolName = subssr.Name
+                        Id = spellschool.Id,
+                        Name = spellschool.Name,
+                        Slug = spellschool.Slug,                        
                     };
 
             return query.ToList();
         }
 
-        private List<SpellSchoolSubSchool> Query_schoolsByName(string slug)
+        public List<DndSpellschool> Query_schoolsByName(string slug)
         {
             var query =
-                    from spell in _context.DndSpell
-                    join spellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SchoolId equals spellschool.Id into ss
-                    from ssr in ss.DefaultIfEmpty()
-                    join subspellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SubSchoolId equals subspellschool.Id into subss
-                    from subssr in subss.DefaultIfEmpty()
-                    where spell.Name.ToLower() == slug.ToLower()
-                    select new SpellSchoolSubSchool
+                    from spellschool in _context.DndSpellschool
+                    join spell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals spell.SchoolId into si
+                    from s in si.DefaultIfEmpty()
+                    join subspell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals subspell.SubSchoolId into sii
+                    from ssub in sii.DefaultIfEmpty()
+                    where s.Name.ToLower() == slug.ToLower()
+                    select new DndSpellschool
                     {
-                        SpellId = spell.Id,
-                        SchoolId = ssr.Id,
-                        SchoolName = ssr.Name,
-                        SubSchoolId = subssr.Id,
-                        SubSchoolName = subssr.Name
+                        Id = spellschool.Id,
+                        Name = spellschool.Name,
+                        Slug = spellschool.Slug,
                     };
 
             return query.ToList();
@@ -161,59 +157,16 @@ namespace dnd_dal.query.spell
         /// </summary>
         /// <param name="spellId">the LONG spell ID</param>
         /// <returns>a list of SpellSchooLSubSchool</returns>
-        private List<SpellSchoolSubSchool> Query_schoolsById(long spellId)
+        public List<DndSpellschool> Query_schoolsById(long spellId)
         {
             var query =
                     from spell in _context.DndSpell
-                    join spellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SchoolId equals spellschool.Id into ss
-                    from ssr in ss.DefaultIfEmpty()
-                    join subspellschool in _context.DndSpellschool.DefaultIfEmpty() on spell.SubSchoolId equals subspellschool.Id into subss
-                    from subssr in subss.DefaultIfEmpty()
+                    join school in _context.DndSpellschool on spell.SchoolId equals school.Id into s
+                    from spellschool in s.DefaultIfEmpty()
                     where spell.Id == spellId
-                    select new SpellSchoolSubSchool
-                    {
-                        SpellId = spell.Id,
-                        SchoolId = ssr.Id,
-                        SchoolName = ssr.Name,
-                        SubSchoolId = subssr.Id,
-                        SubSchoolName = subssr.Name
-                    };
+                    select spellschool;
 
             return query.ToList();
-        }
-
-        /// <summary>
-        /// Will return SpellSchoolSubSchool objects give a spell.
-        /// </summary>
-        /// <param name="parameter">If a Long will call the spell by ID, if a string will assume it's a slug</param>
-        /// <returns></returns>
-        public List<SpellSchoolSubSchool> SchoolBySpell(string parameter)
-        {
-            Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - PARAMS {0}", parameter));
-
-            try
-            {
-                List<SpellSchoolSubSchool> data;
-                if (long.TryParse(parameter, out long longId))
-                    data = Query_schoolsById(longId);
-                else
-                    if (HttpUtility.UrlDecode(parameter).IndexOf(' ')>0) {
-                        data = Query_schoolsByName(parameter);
-                    } else {
-                        data = Query_schoolsBySlug(parameter);
-                    }
-
-                if (data != null) {
-                    Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - results {0}", data.Count()));
-                    return data;
-                };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return null;
         }
 
         #endregion
