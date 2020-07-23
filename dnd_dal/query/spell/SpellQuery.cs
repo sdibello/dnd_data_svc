@@ -116,40 +116,54 @@ namespace dnd_dal.query.spell
         /// <returns>a list of SpellSchoolSubShool objects</returns>
         public List<DndSpellschool> Query_schoolsBySlug(string slug)
         {
-            var query =
-                    from spellschool in _context.DndSpellschool
-                    join spell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals spell.SchoolId into si
-                    from s in si.DefaultIfEmpty()
-                    join subspell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals subspell.SubSchoolId into sii
-                    from ssub in sii.DefaultIfEmpty()
-                    where s.Slug.ToLower() == slug.ToLower()
-                    select new DndSpellschool
-                    {
-                        Id = spellschool.Id,
-                        Name = spellschool.Name,
-                        Slug = spellschool.Slug,                        
-                    };
+            //Couldn't get these to work right in 1 query, tried many approaches.
+            // spell.schoolId is a long, and not nullable, so no null checked needed here.
+            var SchoolQuery =
+                from spell in _context.DndSpell
+                join school in _context.DndSpellschool on spell.SchoolId equals school.Id into s
+                from spellschool in s.DefaultIfEmpty()
+                where spell.Slug.ToLower() == slug.ToLower()
+                select spellschool;
 
-            return query.ToList();
+            //subschoolId is nullable, so need to check for nulls, with the where, we get an empty set, which is better then a null value in a list.
+            var SubSchoolQuery =
+                from spell in _context.DndSpell
+                join school in _context.DndSpellschool on spell.SubSchoolId equals school.Id into s
+                from spellschool in s.DefaultIfEmpty()
+                where spell.Slug.ToLower() == slug.ToLower()
+                where spell.SubSchoolId != null
+                select spellschool;
+
+            // combine the two queries.
+            var returnList = SchoolQuery.Concat(SubSchoolQuery);
+
+            return returnList.ToList();
         }
 
-        public List<DndSpellschool> Query_schoolsByName(string slug)
+        public List<DndSpellschool> Query_schoolsByName(string Name)
         {
-            var query =
-                    from spellschool in _context.DndSpellschool
-                    join spell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals spell.SchoolId into si
-                    from s in si.DefaultIfEmpty()
-                    join subspell in _context.DndSpell.DefaultIfEmpty() on spellschool.Id equals subspell.SubSchoolId into sii
-                    from ssub in sii.DefaultIfEmpty()
-                    where s.Name.ToLower() == slug.ToLower()
-                    select new DndSpellschool
-                    {
-                        Id = spellschool.Id,
-                        Name = spellschool.Name,
-                        Slug = spellschool.Slug,
-                    };
+            //Couldn't get these to work right in 1 query, tried many approaches.
+            // spell.schoolId is a long, and not nullable, so no null checked needed here.
+            var SchoolQuery =
+                from spell in _context.DndSpell
+                join school in _context.DndSpellschool on spell.SchoolId equals school.Id into s
+                from spellschool in s.DefaultIfEmpty()
+                where spell.Name.ToLower() == Name.ToLower()
+                select spellschool;
 
-            return query.ToList();
+            //subschoolId is nullable, so need to check for nulls, with the where, we get an empty set, which is better then a null value in a list.
+            var SubSchoolQuery =
+                from spell in _context.DndSpell
+                join school in _context.DndSpellschool on spell.SubSchoolId equals school.Id into s
+                from spellschool in s.DefaultIfEmpty()
+                where spell.Name.ToLower() == Name.ToLower()
+                where spell.SubSchoolId != null
+                select spellschool;
+
+            // combine the two queries.
+            var returnList = SchoolQuery.Concat(SubSchoolQuery);
+
+            return returnList.ToList();
         }
 
         /// <summary>
@@ -159,14 +173,28 @@ namespace dnd_dal.query.spell
         /// <returns>a list of SpellSchooLSubSchool</returns>
         public List<DndSpellschool> Query_schoolsById(long spellId)
         {
-            var query =
-                    from spell in _context.DndSpell
-                    join school in _context.DndSpellschool on spell.SchoolId equals school.Id into s
-                    from spellschool in s.DefaultIfEmpty()
-                    where spell.Id == spellId
-                    select spellschool;
+            //Couldn't get these to work right in 1 query, tried many approaches.
+            // spell.schoolId is a long, and not nullable, so no null checked needed here.
+            var SchoolQuery =
+                from spell in _context.DndSpell
+                join school in _context.DndSpellschool on spell.SchoolId equals school.Id into s
+                from spellschool in s.DefaultIfEmpty()
+                where spell.Id == spellId
+                select spellschool;
 
-            return query.ToList();
+            //subschoolId is nullable, so need to check for nulls, with the where, we get an empty set, which is better then a null value in a list.
+            var SubSchoolQuery =
+                from spell in _context.DndSpell
+                join school in _context.DndSpellschool on spell.SubSchoolId equals school.Id into s
+                from spellschool in s.DefaultIfEmpty()
+                where spell.Id == spellId
+                where spell.SubSchoolId != null
+                select spellschool;
+
+            // combine the two queries.
+            var returnList = SchoolQuery.Concat(SubSchoolQuery);
+
+            return returnList.ToList();
         }
 
         #endregion
