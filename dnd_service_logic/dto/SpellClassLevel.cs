@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace dnd_service_logic.dto
 {
-    public class SpellClassLevel
+    public class SpellCL
     {
         public long SpellId { get; set; }
         public long ClassId { get; set; }

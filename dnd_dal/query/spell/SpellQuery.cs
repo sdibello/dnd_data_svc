@@ -21,7 +21,7 @@ namespace dnd_dal.query.spell
 
         #region SpellsByClassAndLevel 
 
-        private List<SpellClassLevel> Query_SpellsByClassAndLevel(string CasterClass, long CasterLevel)
+        public List<SpellClassLevel> Query_SpellsByClassAndLevel(string CasterClass, long CasterLevel)
         {
             var query =
                     from cc in _context.DndCharacterclass
@@ -34,17 +34,17 @@ namespace dnd_dal.query.spell
                     select new SpellClassLevel
                     {
                         SpellId = spell.Id,
+                        SpellName = spell.Name,
                         ClassId = spellcl.CharacterClassId,
-                        Level = spellcl.Level,
                         ClassName = cc.Name,
-                        SpellName = spell.Name
+                        LevelForClass = spellcl.Level
                     };
 
 
             return query.ToList();
         }
 
-        private List<SpellClassLevel> Query_ClassAndLevelBySpell(long SpellId)
+        public List<SpellClassLevel> Query_ClassAndLevelBySpell(long SpellId)
         {
             var query =
                     from spellclasslevel in _context.DndSpellclasslevel
@@ -55,7 +55,7 @@ namespace dnd_dal.query.spell
                     {
                         SpellId = spellclasslevel.SpellId,
                         ClassId = spellclasslevel.CharacterClassId,
-                        Level = spellclasslevel.Level,
+                        LevelForClass = spellclasslevel.Level,
                         ClassName = characterclass.Name
                     };
 
@@ -76,35 +76,6 @@ namespace dnd_dal.query.spell
             Console.WriteLine(string.Format("log - ClassAndLevelBySpell - Not Spells Found"));
             return null;
         }
-
-        /// <summary>
-        ///   Pull a list of "SpellClassLewvels items from the database, which lists all spells by class level.
-        /// </summary>
-        /// <param name="context">Database Concept</param>
-        /// <param name="CasterClass">string value of the character class</param>
-        /// <param name="CasterLevel">string value of the character level</param>
-        /// <returns>A list of SpellClassLevels </returns>
-        public List<SpellClassLevel> SpellsByClassAndLevel(string CasterClass, string CasterLevel)
-        {
-            long llevel;
-
-            Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
-
-            if (long.TryParse(CasterLevel, out llevel))
-            {
-                var query = Query_SpellsByClassAndLevel(CasterClass, llevel);
-
-                if (query != null)
-                {
-                    Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel - ByClassAndLevel results {0}", query.Count()));
-                    return query;
-                };
-            }
-
-            Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel - Not Spells Found", CasterClass, CasterLevel));
-            return null;
-        }
-
         #endregion
 
         #region Spell School
@@ -139,6 +110,12 @@ namespace dnd_dal.query.spell
 
             return returnList.ToList();
         }
+
+        /// <summary>
+        /// Returns a list of spell schools for a spell, given the spell slug
+        /// </summary>
+        /// <param name="name">Name of a spell</param>
+        /// <returns>a list of SpellSchoolSubShool objects</returns>
 
         public List<DndSpellschool> Query_schoolsByName(string Name)
         {

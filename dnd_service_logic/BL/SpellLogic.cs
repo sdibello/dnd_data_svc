@@ -9,13 +9,59 @@ using dnd_service_logic.dto;
 
 namespace dnd_service_logic.BL
 {
-    public class SpellLogic : BaseLogic
+    public class SpellLogic : BaseLogic 
     {
         public SpellLogic(dndContext databaseContext)
         {
             base.dbcontext = databaseContext;
         }
 
+        /// <summary>
+        ///   Pull a list of "SpellClassLewvels items from the database, which lists all spells by class level.
+        /// </summary>
+        /// <param name="context">Database Concept</param>
+        /// <param name="CasterClass">string value of the character class</param>
+        /// <param name="CasterLevel">string value of the character level</param>
+        /// <returns>A list of SpellClassLevels </returns>
+        public List<SpellCL> getSpellsByClassAndLevel(string CasterClass, string CasterLevel)
+        {
+            long level;
+            SpellQuery sq = new SpellQuery(this.dbcontext);
+
+            Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
+
+            if (long.TryParse(CasterLevel, out level))
+            {
+                var query = sq.Query_SpellsByClassAndLevel(CasterClass, level).ToList();
+                List<SpellCL> data = new List<SpellCL>();
+
+                foreach (var item in query.ToList())
+                {
+                    SpellCL i = new SpellCL();
+                    i.ClassId = item.ClassId;
+                    i.ClassName = item.ClassName;
+                    i.Level = item.LevelForClass;
+                    i.SpellId = item.SpellId;
+                    i.SpellName = item.SpellName;
+                    data.Add(i);
+                }
+
+                if (query != null)
+                {
+                    Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel - ByClassAndLevel results {0}", query.Count()));
+                    return data;
+                };
+            }
+
+            Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel - Not Spells Found", CasterClass, CasterLevel));
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the primary and sub school for a given spell.
+        /// </summary>
+        /// <param name="spell">Can be the ID, the slug, or the name of the spell</param>
+        /// <returns></returns>
         public List<SpellSchoolSubSchool> getSchools(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - PARAMS {0}", spell));
