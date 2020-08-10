@@ -19,6 +19,76 @@ namespace dnd_dal.query.spell
             _context = context;
         }
 
+        #region SpellClass
+
+        public List<SpellClassLevel> Query_SpellClassByName(string name)
+        {
+            var query =
+                    from cc in _context.DndCharacterclass
+                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from spellcl in spell_class_level.DefaultIfEmpty()
+                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    from spell in sp.DefaultIfEmpty()
+                    where spell.Name.ToLower() == name.ToLower()
+                    select new SpellClassLevel
+                    {
+                        SpellId = spell.Id,
+                        SpellName = spell.Name,
+                        ClassId = spellcl.CharacterClassId,
+                        ClassName = cc.Name,
+                        LevelForClass = spellcl.Level
+                    };
+
+
+            return query.ToList();
+        }
+
+        public List<SpellClassLevel> Query_SpellClassById(long id)
+        {
+            var query =
+                    from cc in _context.DndCharacterclass
+                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from spellcl in spell_class_level.DefaultIfEmpty()
+                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    from spell in sp.DefaultIfEmpty()
+                    where spell.Id == id
+                    select new SpellClassLevel
+                    {
+                        SpellId = spell.Id,
+                        SpellName = spell.Name,
+                        ClassId = spellcl.CharacterClassId,
+                        ClassName = cc.Name,
+                        LevelForClass = spellcl.Level
+                    };
+
+
+            return query.ToList();
+        }
+
+        public List<SpellClassLevel> Query_SpellClassBySlug(string slug)
+        {
+            var query =
+                    from cc in _context.DndCharacterclass
+                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from spellcl in spell_class_level.DefaultIfEmpty()
+                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    from spell in sp.DefaultIfEmpty()
+                    where spell.Slug.ToLower() == slug.ToLower()
+                    select new SpellClassLevel
+                    {
+                        SpellId = spell.Id,
+                        SpellName = spell.Name,
+                        ClassId = spellcl.CharacterClassId,
+                        ClassName = cc.Name,
+                        LevelForClass = spellcl.Level
+                    };
+
+
+            return query.ToList();
+        }
+
+        #endregion
+
         #region SpellsByClassAndLevel 
 
         public List<SpellClassLevel> Query_SpellsByClassAndLevel(string CasterClass, long CasterLevel)

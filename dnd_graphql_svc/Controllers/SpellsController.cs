@@ -40,20 +40,20 @@ namespace dnd_graphql_svc.Controllers
         }
 
         [HttpGet("{id}/class")]
-        public async Task<ActionResult<List<SpellCL>>> GetSpellClassLevel(long id)
+        public async Task<ActionResult<List<SpellCL>>> GetSpellClassLevel(string id)
         {
             List<SpellCL> results;
-            var logic = new dnd_service_logic.BL.SpellLogic(_context);
+            var spelllogic = new dnd_service_logic.BL.SpellLogic(_context);
 
-            results = logic.(id);
+            results = spelllogic.getSchools(id);
 
-            if (data != null)
+            if (results != null)
             {
-                Console.WriteLine(string.Format("log - get spell class - id = {0}", id));
+                Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
                 return data;
             };
 
-            Console.WriteLine(string.Format("log - get spell class - id = {0}", id));
+            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
             return NotFound();
         }
 

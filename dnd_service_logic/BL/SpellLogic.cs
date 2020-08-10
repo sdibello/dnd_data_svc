@@ -64,7 +64,7 @@ namespace dnd_service_logic.BL
         /// <returns></returns>
         public List<SpellSchoolSubSchool> getSchools(string spell)
         {
-            Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - PARAMS {0}", spell));
+            Console.WriteLine(string.Format("log - SpellQuery - getSchools - PARAMS {0}", spell));
             SpellQuery sq = new SpellQuery(this.dbcontext);
             List<SpellSchoolSubSchool> result = new List<SpellSchoolSubSchool>();
 
@@ -85,7 +85,7 @@ namespace dnd_service_logic.BL
                 }
 
                 if (data != null) {
-                    Console.WriteLine(string.Format("log - SpellQuery - SchoolBySpell - results {0}", data.Count()));
+                    Console.WriteLine(string.Format("log - SpellQuery - getSchools - results {0}", data.Count()));
 
                     //TODO - automapper here.
 
@@ -106,5 +106,57 @@ namespace dnd_service_logic.BL
 
             return null;
         }
+
+        public List<SpellSchoolSubSchool> getClass(string spell)
+        {
+            Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
+            SpellQuery sq = new SpellQuery(this.dbcontext);
+            List<SpellClassLevel> result = new List<SpellSchoolSubSchool>();
+
+            try
+            {
+                List<DndSpellschool> data;
+                if (long.TryParse(spell, out long longId))
+                {
+                    result = sq.Query_SpellClassById(longId);
+                }
+                else
+                {
+                    if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
+                    {
+                        result = sq.Query_SpellClassByName(spell);
+                    }
+                    else
+                    {
+                        result = sq.Query_SpellClassBySlug(spell);
+                    }
+                }
+
+                if (data != null)
+                {
+                    Console.WriteLine(string.Format("log - SpellQuery - getClass - results {0}", data.Count()));
+
+                    //TODO - automapper here.
+
+                    foreach (var dndss in data)
+                    {
+                        var item = new SpellSchoolSubSchool
+                        {
+                            SchoolId = dndss.Id,
+                            SchoolName = dndss.Name
+                        };
+                        result.Add(item);
+                    }
+                    return result;
+                };
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return null;
+        }
+
     }
 }
