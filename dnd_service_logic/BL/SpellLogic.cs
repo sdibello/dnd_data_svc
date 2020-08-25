@@ -111,30 +111,34 @@ namespace dnd_service_logic.BL
         {
             Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
             SpellQuery sq = new SpellQuery(this.dbcontext);
-            List<SpellClassLevel> result = new List<SpellSchoolSubSchool>();
+            List<dnd_dal.DndSpell> result = new List<dnd_dal.DndSpell>();
 
             try
             {
                 List<DndSpellschool> data;
                 if (long.TryParse(spell, out long longId))
                 {
-                    result = sq.Query_SpellClassById(longId);
+                    result = sq.Query_dndSpellByID(longId);
                 }
                 else
                 {
                     if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
                     {
-                        result = sq.Query_SpellClassByName(spell);
+                        result = sq.Query_dndSpellByName(spell);
                     }
                     else
                     {
-                        result = sq.Query_SpellClassBySlug(spell);
+                        result = sq.Query_dndSpellBySlug(spell);
                     }
                 }
 
-                if (data != null)
+                // use the spell id here to get the dnd_spellclasslevel
+
+                // user the dnd_spellclasslevel  to pull all the dnd_characterclass
+
+                if (result.Count > 0)
                 {
-                    Console.WriteLine(string.Format("log - SpellQuery - getClass - results {0}", data.Count()));
+                    Console.WriteLine(string.Format("log - SpellQuery - getClass - results {0}", result.Count()));
 
                     //TODO - automapper here.
 

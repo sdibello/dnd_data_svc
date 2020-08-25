@@ -21,6 +21,39 @@ namespace dnd_dal.query.spell
 
         #region SpellClass
 
+        public List<dnd_dal.DndSpell> Query_dndSpellByID(long spellId )
+        {
+            var query =
+                    from spell in _context.DndSpell
+                    where spell.Id == spellId
+                    select spell;
+
+            return query.ToList();
+
+        }
+
+        public List<dnd_dal.DndSpell> Query_dndSpellByName(string name)
+        {
+            var query =
+                    from spell in _context.DndSpell
+                    where spell.Name.ToLower() == name.ToLower()
+                    select spell;
+
+            return query.ToList();
+
+        }
+
+        public List<dnd_dal.DndSpell> Query_dndSpellBySlug(string slug)
+        {
+            var query =
+                    from spell in _context.DndSpell
+                    where spell.Slug.ToLower() == slug.ToLower()
+                    select spell;
+
+            return query.ToList();
+
+        }
+
         public List<SpellClassLevel> Query_SpellClassByName(string name)
         {
             var query =

@@ -45,7 +45,7 @@ namespace dnd_graphql_svc.Controllers
             List<SpellCL> results;
             var spelllogic = new dnd_service_logic.BL.SpellLogic(_context);
 
-            results = spelllogic.getSchools(id);
+            results = spelllogic.getClass(id);
 
             if (results != null)
             {
