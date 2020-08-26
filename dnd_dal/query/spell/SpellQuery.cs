@@ -228,6 +228,22 @@ namespace dnd_dal.query.spell
         #region Spell School
 
         /// <summary>
+        /// Takes a school id, and returns the spellschool
+        /// </summary>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
+        public List<dnd_dal.DndSpellschool> Query_dndSpellSchoolByID(long schoolId)
+        {
+            var query =
+                    from spellschool in _context.DndSpellschool
+                    where spellschool.Id == schoolId
+                    select spellschool;
+
+            return query.ToList();
+
+        }
+
+        /// <summary>
         /// Returns a list of spell schools for a spell, given the spell slug
         /// </summary>
         /// <param name="slug">slug of a spell</param>
