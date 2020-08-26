@@ -50,7 +50,7 @@ namespace dnd_graphql_svc.Controllers
             if (results != null)
             {
                 Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-                return data;
+                return results;
             };
 
             Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
@@ -172,7 +172,7 @@ namespace dnd_graphql_svc.Controllers
         }
 
         [HttpGet("{casterClass}/{casterlevel}")]
-        public async Task<ActionResult<List<SpellClassLevel>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
+        public async Task<ActionResult<List<SpellCL>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
         {
 
             //var query = new SpellQuery(_context);

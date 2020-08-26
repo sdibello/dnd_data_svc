@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using dnd_dal.dto;
+using Microsoft.EntityFrameworkCore.Sqlite.Query;
 using Microsoft.EntityFrameworkCore.Sqlite.Scaffolding.Internal;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Lucene.Net.Index;
 using System.Web;
+
 
 namespace dnd_dal.query.spell
 {
@@ -19,7 +22,7 @@ namespace dnd_dal.query.spell
             _context = context;
         }
 
-        #region SpellClass
+        #region spell
 
         public List<dnd_dal.DndSpell> Query_dndSpellByID(long spellId )
         {
@@ -53,6 +56,47 @@ namespace dnd_dal.query.spell
             return query.ToList();
 
         }
+
+        #endregion
+
+        #region Character Class
+
+        /// <summary>
+        /// Takes in a list of long ids - which is equal to the ids of the chracter classes you need to view.
+        /// </summary>
+        /// <param name="ids">long - list of character classes</param>
+        /// <returns></returns>
+        public List<dnd_dal.DndCharacterclass> Query_dndCharacterClassByIds(List<long> ids)
+        {
+            var query =
+                    from characterClass in _context.DndCharacterclass
+                    where ids.Contains(characterClass.Id)
+                    select characterClass;
+
+            return query.ToList();
+        }
+
+
+        #endregion
+
+        #region spellClass
+
+        /// <summary>
+        /// Returns a spell class level entry, for a spell ID.
+        /// only accepts a single 
+        /// </summary>
+        /// <param name="id">long - id of the spell you are looking for.</param>
+        /// <returns></returns>
+        public List<dnd_dal.DndSpellclasslevel> Query_dndSpellClassLevelBySpellId(long id)
+        {
+            var query =
+                from spellClassLevel in _context.DndSpellclasslevel
+                where spellClassLevel.SpellId == id
+                select spellClassLevel;
+
+            return query.ToList();
+        }
+
 
         public List<SpellClassLevel> Query_SpellClassByName(string name)
         {

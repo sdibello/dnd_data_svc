@@ -107,51 +107,58 @@ namespace dnd_service_logic.BL
             return null;
         }
 
-        public List<SpellSchoolSubSchool> getClass(string spell)
+        public List<SpellCL> getClass(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
             SpellQuery sq = new SpellQuery(this.dbcontext);
-            List<dnd_dal.DndSpell> result = new List<dnd_dal.DndSpell>();
+            List<dnd_dal.DndSpell> spellResult = new List<dnd_dal.DndSpell>();
+            List<SpellCL> data = new List<SpellCL>();
 
             try
             {
-                List<DndSpellschool> data;
                 if (long.TryParse(spell, out long longId))
                 {
-                    result = sq.Query_dndSpellByID(longId);
+                    spellResult = sq.Query_dndSpellByID(longId);
                 }
                 else
                 {
                     if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
                     {
-                        result = sq.Query_dndSpellByName(spell);
-                    }
-                    else
-                    {
-                        result = sq.Query_dndSpellBySlug(spell);
+                        spellResult = sq.Query_dndSpellByName(spell);
+                    } else {
+                        spellResult = sq.Query_dndSpellBySlug(spell);
                     }
                 }
 
                 // use the spell id here to get the dnd_spellclasslevel
-
                 // user the dnd_spellclasslevel  to pull all the dnd_characterclass
-
-                if (result.Count > 0)
+                if (spellResult.Count > 0)
                 {
-                    Console.WriteLine(string.Format("log - SpellQuery - getClass - results {0}", result.Count()));
+                    Console.WriteLine(string.Format("log - SpellQuery - getClass - results {0}", spellResult.Count()));
+                    var spellID = spellResult.First().Id;
 
+                    var SpellClassLevel = sq.Query_dndSpellClassLevelBySpellId(spellID);
+
+                    var CharacterClassIds = SpellClassLevel.Select(x => x.CharacterClassId).ToList();
+
+                    var final = sq.Query_dndCharacterClassByIds(CharacterClassIds);
                     //TODO - automapper here.
-
-                    foreach (var dndss in data)
+                    foreach (var item in SpellClassLevel)
                     {
-                        var item = new SpellSchoolSubSchool
+                        data.Add(new SpellCL
                         {
-                            SchoolId = dndss.Id,
-                            SchoolName = dndss.Name
-                        };
-                        result.Add(item);
+                            SpellId = spellResult.First().Id,
+                            SpellName = spellResult.First().Name,
+                            ClassId = item.CharacterClassId,
+                            ClassName = final.Where(x => x.Id == item.CharacterClassId).First().Name,
+                            Level = item.Level
+                        });
                     }
-                    return result;
+
+
+                    if (data.Count == 0)
+                        return null;
+                    return data;
                 };
             }
             catch (Exception)
