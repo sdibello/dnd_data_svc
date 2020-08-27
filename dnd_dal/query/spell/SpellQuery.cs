@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using dnd_dal.dto;
-using Microsoft.EntityFrameworkCore.Sqlite.Query;
-using Microsoft.EntityFrameworkCore.Sqlite.Scaffolding.Internal;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using Lucene.Net.Index;
-using System.Web;
 
 
 namespace dnd_dal.query.spell
