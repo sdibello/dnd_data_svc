@@ -98,6 +98,8 @@ namespace dnd_service_logic.BL
 
                         result.Add(new SpellSchoolSubSchool
                         {
+                            SpellId = s.Id,
+                            Spellname = s.Name,
                             isPrimary = true,
                             SchoolId = s.SchoolId,
                             SchoolName = primary[0].Name,
@@ -107,6 +109,8 @@ namespace dnd_service_logic.BL
                             var secondary = sq.Query_dndSpellSchoolByID((long)s.SubSchoolId);
                             result.Add(new SpellSchoolSubSchool
                             {
+                                SpellId = s.Id,
+                                Spellname = s.Name,
                                 isPrimary = false,
                                 SchoolId = s.SubSchoolId,
                                 SchoolName = secondary[0].Name,
@@ -151,25 +155,26 @@ namespace dnd_service_logic.BL
                 if (spellResult.Count > 0)
                 {
                     Console.WriteLine(string.Format("log - SpellQuery - getClass - results {0}", spellResult.Count()));
-                    var spellID = spellResult.First().Id;
-
-                    var SpellClassLevel = sq.Query_dndSpellClassLevelBySpellId(spellID);
-
-                    var CharacterClassIds = SpellClassLevel.Select(x => x.CharacterClassId).ToList();
-
-                    var final = sq.Query_dndCharacterClassByIds(CharacterClassIds);
-
-                    foreach (var item in SpellClassLevel)
+                    foreach (var s in spellResult)
                     {
-                        // create spellCL with the data from the last to gets.
-                        data.Add(new SpellCL
+                        var spellID = s.Id;
+                        var scl = sq.Query_dndSpellClassLevelBySpellId(spellID);
+                        var CharacterClassIds = scl.Select(x => x.CharacterClassId).ToList();
+                        var final = sq.Query_dndCharacterClassByIds(CharacterClassIds);
+
+                        foreach (var item in scl)
                         {
-                            SpellId = spellResult.First().Id,
-                            SpellName = spellResult.First().Name,
-                            ClassId = item.CharacterClassId,
-                            ClassName = final.Where(x => x.Id == item.CharacterClassId).First().Name,
-                            Level = item.Level
-                        });
+                            // create spellCL with the data from the last two gets.
+                            data.Add(new SpellCL
+                            {
+                                SpellId = s.Id,
+                                SpellName = spellResult.First().Name,
+                                ClassId = item.CharacterClassId,
+                                ClassName = final.Where(x => x.Id == item.CharacterClassId).First().Name,
+                                Level = item.Level
+                            });
+                        }
+
                     }
 
 

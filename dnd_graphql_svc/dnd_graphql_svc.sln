@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnd_dal", "..\dnd_dal\dnd_d
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnd_svc_test", "..\dnd_svc_test\dnd_svc_test.csproj", "{DAC73EA7-661D-48F4-B874-EAF79D8FA497}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnd_service_logic", "..\dnd_service_logic\dnd_service_logic.csproj", "{F6F71D7D-E620-49FE-83A0-DA062C6DADF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnd_service_logic", "..\dnd_service_logic\dnd_service_logic.csproj", "{F6F71D7D-E620-49FE-83A0-DA062C6DADF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnd_service_logicTests", "..\dnd_service_logicTests\dnd_service_logicTests.csproj", "{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,12 @@ Global
 		{F6F71D7D-E620-49FE-83A0-DA062C6DADF7}.linux|Any CPU.Build.0 = Debug|Any CPU
 		{F6F71D7D-E620-49FE-83A0-DA062C6DADF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6F71D7D-E620-49FE-83A0-DA062C6DADF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}.linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}.linux|Any CPU.Build.0 = Debug|Any CPU
+		{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B0FDAA3-DD3B-4661-8F9A-4BBEAA6B067D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

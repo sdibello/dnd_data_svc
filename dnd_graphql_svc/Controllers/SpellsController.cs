@@ -175,24 +175,24 @@ namespace dnd_graphql_svc.Controllers
         public async Task<ActionResult<List<SpellCL>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
         {
 
-            //var query = new SpellQuery(_context);
-            //var results = query.SpellsByClassAndLevel(casterClass, casterlevel);
+            var logic = new dnd_service_logic.BL.SpellLogic(_context);
+            var results = logic.getSpellsByClassAndLevel(casterClass, casterlevel);
 
-            //if (results != null)
-            //{
-            //    if (results.Count != 0)
-            //    {
-            //        Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
-            //        return results;
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
-            //        return NotFound();
-            //    }
-            //};
+            if (results != null)
+            {
+                if (results.Count != 0)
+                {
+                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
+                    return results;
+                }
+                else
+                {
+                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
+                    return NotFound();
+                }
+            };
 
-            //Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
+            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
             return NotFound();
         }
 
