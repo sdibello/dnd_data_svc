@@ -60,62 +60,21 @@ namespace dnd_graphql_svc.Controllers
         // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFra meworkCore.Sqlite
         // GET: api/Spells/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Spell>> GetSpell(string id)
+        public async Task<ActionResult<List<Spell>>> GetSpell(string id)
         {
-            int intId;
-            DndSpell spelldb;
-            Spell spell = new Spell();
-            List<SpellSearch> searchresults;
+            List<Spell> results;
+            var spelllogic = new dnd_service_logic.BL.SpellLogic(_context);
 
-            if (int.TryParse(id, out intId) == true)
+            results = spelllogic.getSpells(id);
+
+            if (results != null)
             {
-                spelldb = _context.DndSpell.Where(x => x.Id == intId).FirstOrDefault();
-            } else {
-                if (id.IndexOf(' ') > 0) {
-                    spelldb = _context.DndSpell.Where(x => x.Name.ToLower() == HttpUtility.UrlDecode(id.ToLower())).FirstOrDefault();
-                } else {
-                    spelldb = _context.DndSpell.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
-                }
-            }
-
-            if (spelldb!= null)
-            {
-                //replace with automapper.
-                spell.Id = spelldb.Id;
-                spell.Description = spelldb.Description;
-                spell.Name = spelldb.Name;
-                spell.CastingTime = spelldb.CastingTime;
-                spell.Range = spelldb.Range;
-                spell.SavingThrow = spelldb.SavingThrow;
-                spell.SpellResistance = spelldb.SpellResistance;
-                spell.Duration = spelldb.Duration;
-                spell.Target = spelldb.Target;
-                spell.Slug = spelldb.Slug;
-                spell.SubSchoolId = spelldb.SubSchoolId;
-                spell.SchoolId = spelldb.SchoolId;
-                spell.ArcaneFocusComponent = spelldb.ArcaneFocusComponent;
-                spell.DivineFocusComponent = spelldb.DivineFocusComponent;
-                spell.MaterialComponent = spelldb.MaterialComponent;
-                spell.SomaticComponent = spelldb.SomaticComponent;
-                spell.VerbalComponent = spelldb.VerbalComponent;
-                spell.XpComponent = spelldb.XpComponent;
-            }
-
-            //var school = Query.SchoolBySpell(id);
-
-            if (spell.Id > 0)
-            {
-                Console.WriteLine(string.Format("log - get spell - ({0}) name = {1}", id, spelldb.Name));
-                return spell;
+                Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+                return results;
             };
 
-            if (int.TryParse(id, out intId) == false) {
-            //    searchresults = _find.WildcardSearch(id);
-            //    spell.search = searchresults;
-            }
-
-            Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", id));
-            return spell;
+            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+            return NotFound();
         }
 
         [HttpGet("{id}/school")]

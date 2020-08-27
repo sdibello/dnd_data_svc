@@ -191,5 +191,75 @@ namespace dnd_service_logic.BL
             return null;
         }
 
+        public List<Spell> getSpells(string spell)
+        {
+            int intId;
+            List<DndSpell> spelldb;
+            List<Spell> result =  new List<Spell>();
+            List<SpellSearch> searchresults;
+            SpellQuery sq = new SpellQuery(this.dbcontext);
+
+            // get the spell #refactor
+            if (long.TryParse(spell, out long longId))
+            {
+                spelldb = sq.Query_dndSpellByID(longId);
+            }
+            else
+            {
+                if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
+                {
+                    spelldb = sq.Query_dndSpellByName(spell);
+                }
+                else
+                {
+                    spelldb = sq.Query_dndSpellBySlug(spell);
+                }
+            }
+
+            if (spelldb != null)
+            {
+                foreach (var s in spelldb)
+                {
+                    result.Add( new Spell
+                    {
+                        Id = s.Id,
+                        Description = s.Description,
+                        Name = s.Name,
+                        CastingTime = s.CastingTime,
+                        Range = s.Range,
+                        SavingThrow = s.SavingThrow,
+                        SpellResistance = s.SpellResistance,
+                        Duration = s.Duration,
+                        Target = s.Target,
+                        Slug = s.Slug,
+                        SubSchoolId = s.SubSchoolId,
+                        SchoolId = s.SchoolId,
+                        ArcaneFocusComponent = s.ArcaneFocusComponent,
+                        DivineFocusComponent = s.DivineFocusComponent,
+                        MaterialComponent = s.MaterialComponent,
+                        SomaticComponent = s.SomaticComponent,
+                        VerbalComponent = s.VerbalComponent,
+                        XpComponent = s.XpComponent
+                    });
+                }
+            }
+
+            if (result.Count > 0)
+            {
+                // log doesn't make sense with multiple possibly returned
+                //Console.WriteLine(string.Format("log - get spell - ({0}) name = {1}", longId, spelldb.First().Name));
+                return result;
+            };
+
+            //if (long.TryParse(longId, out intId) == false)
+            //{
+                //    searchresults = _find.WildcardSearch(id);
+                //    spell.search = searchresults;
+            //}
+
+            Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", longId));
+            return result;
+        }
+
     }
 }
