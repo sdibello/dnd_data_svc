@@ -16,8 +16,10 @@ namespace dnd_dal.query.Lookup
 
         public List<DndRulebook> Query_dndRuleBooks(List<long> ids)
         {
+            var dndContext = new dndContext();
+
             var query =
-                    from rulebook in _context.DndRulebook
+                    from rulebook in dndContext.DndRulebook
                     where ids.Contains(rulebook.Id)
                     select rulebook;
 

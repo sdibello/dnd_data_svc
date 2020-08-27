@@ -20,39 +20,49 @@ namespace dnd_graphql_svc.Controllers
 
         private readonly dndContext _context;
 
+        //[HttpGet("Rulebook")]
+        //public async Task<ActionResult<List<dnd_dal.DndRulebook>>> getRulebooks()
+        //{
+        //    List<DndRulebook> results;
+        //    var lookupLogic = new dnd_service_logic.BL.LookupLogic(_context);
+
+        //    results = lookupLogic.getRuleBooks();
+
+        //    if (results != null)
+        //    {
+        //        //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+        //        return results;
+        //    };
+
+        //    //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+        //    return NotFound();
+        //}
+
         [HttpGet("Rulebook")]
-        public async Task<ActionResult<List<dnd_dal.DndRulebook>>> getRulebooks()
-        {
-            List<DndRulebook> results;
-            var lookupLogic = new dnd_service_logic.BL.LookupLogic(_context);
-
-            results = lookupLogic.getRuleBooks();
-
-            if (results != null)
-            {
-                Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-                return results;
-            };
-
-            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-            return NotFound();
-        }
-
-        [HttpGet("Rulebook/{ids}")]
         public async Task<ActionResult<List<dnd_dal.DndRulebook>>> getRulebooks(string ids)
         {
-            List<DndRulebook> results;
+            List<DndRulebook> results = new List<DndRulebook>();
             var lookupLogic = new dnd_service_logic.BL.LookupLogic(_context);
 
-            results = lookupLogic.getRuleBooks(ids);
+            if(ids!=null)
+            {
+                if (ids.Length > 0)
+                {
+                    List<long> listIds = ids.Split(",").Select(long.Parse).ToList();
+                    results = lookupLogic.getRuleBooks(listIds);
+                }
+            }
+            else {
+                results = lookupLogic.getRuleBooks();
+            }
 
             if (results != null)
             {
-                Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+                //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
                 return results;
             };
 
-            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+            //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
             return NotFound();
         }
     }
