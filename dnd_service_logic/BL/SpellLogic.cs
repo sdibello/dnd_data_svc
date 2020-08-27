@@ -239,7 +239,8 @@ namespace dnd_service_logic.BL
                         MaterialComponent = s.MaterialComponent,
                         SomaticComponent = s.SomaticComponent,
                         VerbalComponent = s.VerbalComponent,
-                        XpComponent = s.XpComponent
+                        XpComponent = s.XpComponent,
+                        RulebookId = s.RulebookId
                     });
                 }
             }
