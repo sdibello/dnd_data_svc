@@ -5,8 +5,19 @@ using System.Text;
 
 namespace dnd_service_logic
 {
-    public class BaseLogic
+    public abstract class BaseLogic
     {
-        public dndContext dbcontext { get; set; }
+        protected dndContext db { get; set; }
+
+        public BaseLogic()
+        {
+            db = new dndContext();
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            db.Dispose();
+        }
+
     }
 }
