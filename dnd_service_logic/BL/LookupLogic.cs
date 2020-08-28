@@ -14,13 +14,13 @@ namespace dnd_service_logic.BL
     {
         public LookupLogic(dndContext databaseContext)
         {
-            base.dbcontext = databaseContext;
+            base.db = databaseContext;
         }
 
         public List<DndRulebook> getRuleBooks()
         {
             Console.WriteLine(string.Format("log - LookupQuery - getRuleBooks "));
-            LookupQuery lq = new LookupQuery(this.dbcontext);
+            LookupQuery lq = new LookupQuery(this.db);
             List<DndRulebook> lookupResult = null;
 
             try
@@ -45,7 +45,7 @@ namespace dnd_service_logic.BL
         public List<DndRulebook> getRuleBooks(List<long> ids)
         {
             Console.WriteLine(string.Format("log - LookupQuery - getRuleBooks "));
-            LookupQuery lq = new LookupQuery(this.dbcontext);
+            LookupQuery lq = new LookupQuery(this.db);
             List<DndRulebook> lookupResult = null;
 
             try

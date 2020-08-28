@@ -8,19 +8,16 @@ namespace dnd_dal.query.spell
 {
     public class SpellQuery
     {
-        private readonly dndContext _context;
-
-        public SpellQuery(dndContext context)
-        {
-            _context = context;
-        }
+        protected readonly dndContext _context;
 
         #region spell
 
         public List<dnd_dal.DndSpell> Query_dndSpellByID(long spellId )
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from spell in _context.DndSpell
+                    from spell in db.DndSpell
                     where spell.Id == spellId
                     select spell;
 
@@ -30,8 +27,10 @@ namespace dnd_dal.query.spell
 
         public List<dnd_dal.DndSpell> Query_dndSpellByName(string name)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from spell in _context.DndSpell
+                    from spell in db.DndSpell
                     where spell.Name.ToLower() == name.ToLower()
                     select spell;
 
@@ -41,8 +40,10 @@ namespace dnd_dal.query.spell
 
         public List<dnd_dal.DndSpell> Query_dndSpellBySlug(string slug)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from spell in _context.DndSpell
+                    from spell in db.DndSpell
                     where spell.Slug.ToLower() == slug.ToLower()
                     select spell;
 
@@ -61,8 +62,10 @@ namespace dnd_dal.query.spell
         /// <returns></returns>
         public List<dnd_dal.DndCharacterclass> Query_dndCharacterClassByIds(List<long> ids)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from characterClass in _context.DndCharacterclass
+                    from characterClass in db.DndCharacterclass
                     where ids.Contains(characterClass.Id)
                     select characterClass;
 
@@ -82,8 +85,10 @@ namespace dnd_dal.query.spell
         /// <returns></returns>
         public List<dnd_dal.DndSpellclasslevel> Query_dndSpellClassLevelBySpellId(long id)
         {
+            dndContext db = new dndContext();
+
             var query =
-                from spellClassLevel in _context.DndSpellclasslevel
+                from spellClassLevel in db.DndSpellclasslevel
                 where spellClassLevel.SpellId == id
                 select spellClassLevel;
 
@@ -93,11 +98,13 @@ namespace dnd_dal.query.spell
 
         public List<SpellClassLevel> Query_SpellClassByName(string name)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from cc in _context.DndCharacterclass
-                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from cc in db.DndCharacterclass
+                    join scl in db.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
                     from spellcl in spell_class_level.DefaultIfEmpty()
-                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    join s in db.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
                     from spell in sp.DefaultIfEmpty()
                     where spell.Name.ToLower() == name.ToLower()
                     select new SpellClassLevel
@@ -115,11 +122,13 @@ namespace dnd_dal.query.spell
 
         public List<SpellClassLevel> Query_SpellClassById(long id)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from cc in _context.DndCharacterclass
-                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from cc in db.DndCharacterclass
+                    join scl in db.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
                     from spellcl in spell_class_level.DefaultIfEmpty()
-                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    join s in db.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
                     from spell in sp.DefaultIfEmpty()
                     where spell.Id == id
                     select new SpellClassLevel
@@ -137,11 +146,13 @@ namespace dnd_dal.query.spell
 
         public List<SpellClassLevel> Query_SpellClassBySlug(string slug)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from cc in _context.DndCharacterclass
-                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from cc in db.DndCharacterclass
+                    join scl in db.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
                     from spellcl in spell_class_level.DefaultIfEmpty()
-                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    join s in db.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
                     from spell in sp.DefaultIfEmpty()
                     where spell.Slug.ToLower() == slug.ToLower()
                     select new SpellClassLevel
@@ -163,11 +174,13 @@ namespace dnd_dal.query.spell
 
         public List<SpellClassLevel> Query_SpellsByClassAndLevel(string CasterClass, long CasterLevel)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from cc in _context.DndCharacterclass
-                    join scl in _context.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
+                    from cc in db.DndCharacterclass
+                    join scl in db.DndSpellclasslevel.DefaultIfEmpty() on cc.Id equals scl.CharacterClassId into spell_class_level
                     from spellcl in spell_class_level.DefaultIfEmpty()
-                    join s in _context.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
+                    join s in db.DndSpell.DefaultIfEmpty() on spellcl.SpellId equals s.Id into sp
                     from spell in sp.DefaultIfEmpty()
                     where cc.Slug.ToLower() == CasterClass.ToLower()
                     where spellcl.Level == CasterLevel
@@ -186,9 +199,11 @@ namespace dnd_dal.query.spell
 
         public List<SpellClassLevel> Query_ClassAndLevelBySpell(long SpellId)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from spellclasslevel in _context.DndSpellclasslevel
-                    join cc in _context.DndCharacterclass.DefaultIfEmpty() on spellclasslevel.CharacterClassId equals cc.Id into char_class
+                    from spellclasslevel in db.DndSpellclasslevel
+                    join cc in db.DndCharacterclass.DefaultIfEmpty() on spellclasslevel.CharacterClassId equals cc.Id into char_class
                     from characterclass in char_class.DefaultIfEmpty()
                     where spellclasslevel.SpellId == SpellId
                     select new SpellClassLevel
@@ -227,8 +242,10 @@ namespace dnd_dal.query.spell
         /// <returns></returns>
         public List<dnd_dal.DndSpellschool> Query_dndSpellSchoolByID(long schoolId)
         {
+            dndContext db = new dndContext();
+
             var query =
-                    from spellschool in _context.DndSpellschool
+                    from spellschool in db.DndSpellschool
                     where spellschool.Id == schoolId
                     select spellschool;
 

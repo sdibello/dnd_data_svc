@@ -26,7 +26,7 @@ namespace dnd_service_logic.BL
         public List<SpellCL> getSpellsByClassAndLevel(string CasterClass, string CasterLevel)
         {
             long level;
-            SpellQuery sq = new SpellQuery(this.db);
+            SpellQuery sq = new SpellQuery();
 
             Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
 
@@ -65,7 +65,7 @@ namespace dnd_service_logic.BL
         public List<SpellSchoolSubSchool> getSchools(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - getSchools - PARAMS {0}", spell));
-            SpellQuery sq = new SpellQuery(this.db);
+            SpellQuery sq = new SpellQuery();
             List<SpellSchoolSubSchool> result = new List<SpellSchoolSubSchool>();
             List<DndSpell> spellResult = null;
 
@@ -131,7 +131,7 @@ namespace dnd_service_logic.BL
         public List<SpellCL> getClass(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
-            SpellQuery sq = new SpellQuery(this.db);
+            SpellQuery sq = new SpellQuery();
             List<dnd_dal.DndSpell> spellResult = new List<dnd_dal.DndSpell>();
             List<SpellCL> data = new List<SpellCL>();
 
@@ -197,7 +197,7 @@ namespace dnd_service_logic.BL
             List<DndSpell> spelldb;
             List<Spell> result =  new List<Spell>();
             List<SpellSearch> searchresults;
-            SpellQuery sq = new SpellQuery(this.db);
+            SpellQuery sq = new SpellQuery();
 
             // get the spell #refactor
             if (long.TryParse(spell, out long longId))
