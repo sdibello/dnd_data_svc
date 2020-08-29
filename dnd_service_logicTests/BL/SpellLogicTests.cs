@@ -11,12 +11,12 @@ namespace dnd_service_logic.BL.Tests
     public class SpellLogicTests
     {
         [TestMethod()]
-        public void getClassTest()
+        public void getSpellTest()
         {
             //SpellLogic spelllogic = new SpellLogic();
-            
-
-            //Assert.Fail;
+            dnd_service_logic.BL.SpellLogic sl = new SpellLogic();
+            var result = sl.getSpells("45");
+            Assert.IsNotNull(result);
         }
     }
 }

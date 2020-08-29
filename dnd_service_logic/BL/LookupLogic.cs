@@ -20,7 +20,7 @@ namespace dnd_service_logic.BL
         public List<DndRulebook> getRuleBooks()
         {
             Console.WriteLine(string.Format("log - LookupQuery - getRuleBooks "));
-            LookupQuery lq = new LookupQuery(this.db);
+            LookupQuery lq = new LookupQuery();
             List<DndRulebook> lookupResult = null;
 
             try
@@ -31,7 +31,7 @@ namespace dnd_service_logic.BL
 
                 if (lookupResult != null)
                 {
-                    Console.WriteLine(string.Format("log - getSchools - getSchools - results {0}", lookupResult.Count()));
+                    Console.WriteLine(string.Format("log - getRuleBooks - results {0}", lookupResult.Count()));
                     return lookupResult;
                 };
             }
@@ -45,7 +45,7 @@ namespace dnd_service_logic.BL
         public List<DndRulebook> getRuleBooks(List<long> ids)
         {
             Console.WriteLine(string.Format("log - LookupQuery - getRuleBooks "));
-            LookupQuery lq = new LookupQuery(this.db);
+            LookupQuery lq = new LookupQuery();
             List<DndRulebook> lookupResult = null;
 
             try
@@ -56,7 +56,7 @@ namespace dnd_service_logic.BL
 
                 if (lookupResult != null)
                 {
-                    Console.WriteLine(string.Format("log - getSchools - getSchools - results {0}", lookupResult.Count()));
+                    Console.WriteLine(string.Format("log - getRuleBooks - results {0}", lookupResult.Count()));
                     return lookupResult;
                 };
             }

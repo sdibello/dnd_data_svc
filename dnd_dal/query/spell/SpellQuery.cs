@@ -8,8 +8,6 @@ namespace dnd_dal.query.spell
 {
     public class SpellQuery
     {
-        protected readonly dndContext _context;
-
         #region spell
 
         public List<dnd_dal.DndSpell> Query_dndSpellByID(long spellId )

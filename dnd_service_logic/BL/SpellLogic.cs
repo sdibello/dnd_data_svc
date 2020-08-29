@@ -11,11 +11,6 @@ namespace dnd_service_logic.BL
 {
     public class SpellLogic : BaseLogic 
     {
-        public SpellLogic(dndContext databaseContext)
-        {
-            base.db = databaseContext;
-        }
-
         /// <summary>
         ///   Pull a list of "SpellClassLewvels items from the database, which lists all spells by class level.
         /// </summary>
@@ -247,7 +242,7 @@ namespace dnd_service_logic.BL
 
             if (result.Count > 0)
             {
-                // log doesn't make sense with multiple possibly returned
+                //log doesn't make sense with multiple possibly returned
                 //Console.WriteLine(string.Format("log - get spell - ({0}) name = {1}", longId, spelldb.First().Name));
                 return result;
             };

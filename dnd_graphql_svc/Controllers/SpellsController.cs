@@ -43,7 +43,7 @@ namespace dnd_graphql_svc.Controllers
         public async Task<ActionResult<List<SpellCL>>> GetSpellClassLevel(string id)
         {
             List<SpellCL> results;
-            var spelllogic = new dnd_service_logic.BL.SpellLogic(_context);
+            var spelllogic = new dnd_service_logic.BL.SpellLogic();
 
             results = spelllogic.getClass(id);
 
@@ -63,7 +63,7 @@ namespace dnd_graphql_svc.Controllers
         public async Task<ActionResult<List<Spell>>> GetSpell(string id)
         {
             List<Spell> results;
-            var spelllogic = new dnd_service_logic.BL.SpellLogic(_context);
+            var spelllogic = new dnd_service_logic.BL.SpellLogic();
 
             results = spelllogic.getSpells(id);
 
@@ -81,7 +81,7 @@ namespace dnd_graphql_svc.Controllers
         public ActionResult<List<SpellSchoolSubSchool>> School(string id)
         {
             List<SpellSchoolSubSchool> results;
-            var logic = new dnd_service_logic.BL.SpellLogic(_context);
+            var logic = new dnd_service_logic.BL.SpellLogic();
 
             results = logic.getSchools(id);
  
@@ -134,7 +134,7 @@ namespace dnd_graphql_svc.Controllers
         public async Task<ActionResult<List<SpellCL>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
         {
 
-            var logic = new dnd_service_logic.BL.SpellLogic(_context);
+            var logic = new dnd_service_logic.BL.SpellLogic();
             var results = logic.getSpellsByClassAndLevel(casterClass, casterlevel);
 
             if (results != null)

@@ -7,12 +7,6 @@ namespace dnd_dal.query.Lookup
 {
     public class LookupQuery
     {
-        private readonly dndContext _context;
-
-        public LookupQuery(dndContext context)
-        {
-            _context = context;
-        }
 
         public List<DndRulebook> Query_dndRuleBooks(List<long> ids)
         {

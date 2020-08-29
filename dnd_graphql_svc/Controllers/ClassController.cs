@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using dnd_dal;
-using dnd_graphql_svc.dto;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using dnd_service_logic.dto;
 
 namespace dnd_graphql_svc.Controllers
 {
