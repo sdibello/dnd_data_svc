@@ -66,23 +66,7 @@ namespace dnd_service_logic.BL
 
             try
             {
-                List<DndSpellschool> data;
-                // get the spell #refactor
-                if (long.TryParse(spell, out long longId))
-                {
-                    spellResult = sq.Query_dndSpellByID(longId).ToList();
-                }
-                else
-                {
-                    if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
-                    {
-                        spellResult = sq.Query_dndSpellByName(spell).ToList();
-                    }
-                    else
-                    {
-                        spellResult = sq.Query_dndSpellBySlug(spell).ToList();
-                    }
-                }
+                spellResult = getDBSpell(spell);
 
                 if (spellResult != null) {
                     Console.WriteLine(string.Format("log - getSchools - getSchools - results {0}", spellResult.Count()));
@@ -123,6 +107,29 @@ namespace dnd_service_logic.BL
             return result;
         }
 
+        public List<DndSpell> getDBSpell(string spell)
+        {
+            List<DndSpell> spelldb;
+            SpellQuery sq = new SpellQuery();
+            // get the spell #refactor
+            if (long.TryParse(spell, out long longId))
+            {
+                spelldb = sq.Query_dndSpellByID(longId);
+            }
+            else
+            {
+                if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
+                {
+                    spelldb = sq.Query_dndSpellByName(spell);
+                }
+                else
+                {
+                    spelldb = sq.Query_dndSpellBySlug(spell);
+                }
+            }
+            return spelldb;
+        }
+
         public List<SpellCL> getClass(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
@@ -132,20 +139,7 @@ namespace dnd_service_logic.BL
 
             try
             {
-                // get the spell #refactor
-                if (long.TryParse(spell, out long longId))
-                {
-                    spellResult = sq.Query_dndSpellByID(longId);
-                }
-                else
-                {
-                    if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
-                    {
-                        spellResult = sq.Query_dndSpellByName(spell);
-                    } else {
-                        spellResult = sq.Query_dndSpellBySlug(spell);
-                    }
-                }
+                spellResult = getDBSpell(spell);
 
                 if (spellResult.Count > 0)
                 {
@@ -192,24 +186,8 @@ namespace dnd_service_logic.BL
             List<DndSpell> spelldb;
             List<Spell> result =  new List<Spell>();
             List<SpellSearch> searchresults;
-            SpellQuery sq = new SpellQuery();
 
-            // get the spell #refactor
-            if (long.TryParse(spell, out long longId))
-            {
-                spelldb = sq.Query_dndSpellByID(longId);
-            }
-            else
-            {
-                if (HttpUtility.UrlDecode(spell).IndexOf(' ') > 0)
-                {
-                    spelldb = sq.Query_dndSpellByName(spell);
-                }
-                else
-                {
-                    spelldb = sq.Query_dndSpellBySlug(spell);
-                }
-            }
+            spelldb = getDBSpell(spell);
 
             if (spelldb != null)
             {
@@ -253,7 +231,7 @@ namespace dnd_service_logic.BL
                 //    spell.search = searchresults;
             //}
 
-            Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", longId));
+            Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", spell));
             return result;
         }
 
