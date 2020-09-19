@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using dnd_dal.dto;
 
-
 namespace dnd_dal.query.spell
 {
     public class SpellQuery
