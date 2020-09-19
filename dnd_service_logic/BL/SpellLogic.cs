@@ -27,9 +27,11 @@ namespace dnd_service_logic.BL
 
             if (long.TryParse(CasterLevel, out level))
             {
+                //Get Class and Level data from the database.
                 var query = sq.Query_SpellsByClassAndLevel(CasterClass, level).ToList();
                 List<SpellCL> data = new List<SpellCL>();
 
+                //Format the data from the query into a DTO and pass.
                 foreach (var item in query.ToList())
                 {
                     SpellCL i = new SpellCL();

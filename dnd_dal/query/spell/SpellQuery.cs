@@ -46,7 +46,7 @@ namespace dnd_dal.query.spell
                     select spell;
 
             return query.ToList();
-
+              
         }
 
         #endregion

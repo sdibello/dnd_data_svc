@@ -30,57 +30,43 @@ namespace dnd_graphql_svc.Controllers
         // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFra meworkCore.Sqlite
         // GET: api/Spells/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DndCharacterclass>> GetClass(string id)
+        public async Task<ActionResult<List<DndCharacterclass>>> GetClass(string id)
         {
-            int intId;
-            DndCharacterclass data;
+            List<DndCharacterclass> results;
+            var characterclasslogic = new dnd_service_logic.BL.ClassLogic();
 
-            if (int.TryParse(id, out intId) == true)
-            {
-                data = _context.DndCharacterclass.Where(x => x.Id == intId).FirstOrDefault();
-            } else {
-                data = _context.DndCharacterclass.Where(x => x.Slug.ToLower() == id.ToLower()).FirstOrDefault();
-            }
+            results = characterclasslogic.getDBClass(id);
 
-            if (data != null)
+            if (results != null)
             {
-                Console.WriteLine(string.Format("log - get class - ({0}) name = {1}", id, data.Name));
-                return data;
+                Console.WriteLine(string.Format("log - GetClass - id = {0}", id));
+                return results;
             };
 
-            Console.WriteLine(string.Format("log - get class - ({0}) - 404, not found", id));
+            Console.WriteLine(string.Format("log - GetClass - id = {0}", id));
             return NotFound();
+
+
         }
 
         [HttpGet("{id}/spells")]
-        public async Task<ActionResult<List<ClassSpell>>> GetSpellClassLevel(int id)
+        public async Task<ActionResult<List<ClassSpell>>> GetSpellClassLevel(string id)
         {
-         
-            var query = _context.DndSpellclasslevel.Where(scl => scl.CharacterClassId == id)
-                .Join(
-                    _context.DndSpell,
-                    cl => cl.SpellId,
-                    s => s.Id,
-                    (cl, s) => new ClassSpell
-                    {
-                        SpellId = s.Id,
-                        SpellName = s.Name,
-                        Level = cl.Level,
-                        ClassId = cl.CharacterClassId
-                    })
-                .OrderBy(g => g.Level).ThenBy(g => g.SpellName)
-                .ToList();
+            List<ClassSpell> results;
+            var characterclasslogic = new dnd_service_logic.BL.ClassLogic();
 
-            if (query != null)
+            // get the character class ID
+            results = characterclasslogic.getclassSpells(id);
+            var ordered = results.OrderBy(c => c.Level).ThenBy(c => c.SpellName);
+
+            if (ordered != null)
             {
                 Console.WriteLine(string.Format("log -GetSpellClassLevel - id = {0}", id));
-                return query;
+                return ordered.ToList();
             };
 
             Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
             return NotFound();
         }
-
-
     }
 }
