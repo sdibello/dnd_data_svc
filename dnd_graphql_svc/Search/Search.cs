@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Lucene;
-using Lucene.Net.Util;
-using Lucene.Net.Store;
-using Lucene.Net.Index;
+﻿using dnd_dal.dto;
 using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Documents;
+using Lucene.Net.Index;
 using Lucene.Net.Search;
-using Lucene.Net.QueryParsers;
-using Directory = Lucene.Net.Store.Directory;
-using Lucene.Net.QueryParsers.Classic;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using dnd_dal.dto;
 
 namespace dnd_graphql_svc.Search
 {
@@ -42,46 +35,46 @@ namespace dnd_graphql_svc.Search
             var writer = new IndexWriter(dir, indexConfig);
         }
 
-        public List<SpellSearch> WildcardSearch(string searchTerm)
-        {
-            List<SpellSearch> results = new List<SpellSearch>();
+        //public List<SpellSearch> WildcardSearch(string searchTerm)
+        //{
+        //    List<SpellSearch> results = new List<SpellSearch>();
 
-            var di = new DirectoryInfo(_indexPath);
-            var dir = FSDirectory.Open(di);
+        //    var di = new DirectoryInfo(_indexPath);
+        //    var dir = FSDirectory.Open(di);
 
-            if (_indexConfig == null)
-                _indexConfig = new IndexWriterConfig(_AppLuceneVersion, _analyzer);
+        //    if (_indexConfig == null)
+        //        _indexConfig = new IndexWriterConfig(_AppLuceneVersion, _analyzer);
 
-            var writer = new IndexWriter(dir, _indexConfig);
-            var searcher = new IndexSearcher(writer.GetReader(applyAllDeletes: true));
+        //    var writer = new IndexWriter(dir, _indexConfig);
+        //    var searcher = new IndexSearcher(writer.GetReader(applyAllDeletes: true));
 
-            try
-            {
-                // search name is lower case, to make thing seasier.
-                var phrase = new WildcardQuery(new Term("search_name", '*' + searchTerm + '*'));
-                var hits = searcher.Search(phrase, 20).ScoreDocs;
-                Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
-                foreach (var hit in hits)
-                {
-                    var foundDoc = searcher.Doc(hit.Doc);
-                    Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
-                    results.Add(new SpellSearch(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
-                }
-            }
-            catch (Exception)
-            {
+        //    try
+        //    {
+        //        // search name is lower case, to make thing seasier.
+        //        var phrase = new WildcardQuery(new Term("search_name", '*' + searchTerm + '*'));
+        //        var hits = searcher.Search(phrase, 20).ScoreDocs;
+        //        Console.WriteLine(string.Format("log - index found - ({0}) - ", hits.Length));
+        //        foreach (var hit in hits)
+        //        {
+        //            var foundDoc = searcher.Doc(hit.Doc);
+        //            Console.WriteLine(string.Format("log - item found-{0} ({1}) - ", foundDoc.Get("name"), foundDoc.Get("id")));
+        //            results.Add(new SpellSearch(long.Parse(foundDoc.Get("id")), foundDoc.Get("name").ToString()));
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
-            finally
-            {
-                searcher = null;
-                writer.Dispose();
-                writer = null;
-            }
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        searcher = null;
+        //        writer.Dispose();
+        //        writer = null;
+        //    }
 
-            return results;
-        }
+        //    return results;
+        //}
 
     }
 }

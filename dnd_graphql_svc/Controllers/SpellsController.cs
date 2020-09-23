@@ -1,23 +1,14 @@
-﻿using System;
+﻿using dnd_dal;
+using dnd_service_logic.dto;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Documents;
+using Lucene.Net.Index;
+using Lucene.Net.Store;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Web;
-using Lucene.Net.Store;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
-using Lucene.Net.Documents;
-using Lucene.Net.Search;
-using Lucene.Net.QueryParsers;
-using Directory = Lucene.Net.Store.Directory;
-using Lucene.Net.QueryParsers.Classic;
-using System.IO;
-using dnd_graphql_svc.Search;
-using AutoMapper;
-using dnd_service_logic.dto;
-using dnd_service_logic;
-using dnd_dal;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -26,7 +17,7 @@ namespace dnd_graphql_svc.Controllers
     public class SpellsController : Controller
     {
         private readonly dndContext _context;
-        public Search.Search _find;
+        //public Search.Search _find;
 
         public IActionResult Index()
         {
@@ -36,7 +27,7 @@ namespace dnd_graphql_svc.Controllers
         public SpellsController(dndContext context)
         {
             _context = context;
-            _find = new Search.Search();
+            //_find = new Search.Search();
         }
 
         [HttpGet("{id}/class")]
