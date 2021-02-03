@@ -33,8 +33,6 @@ namespace dnd_graphql_svc.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<List<DndFeat>>> GetFeat(string id)
         {
-            int intId;
-            DndFeat featdb;
             FeatLogic fl = new FeatLogic();
 
             var query = fl.GetFeat(id);

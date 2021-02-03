@@ -16,7 +16,7 @@
     "IIS Express": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/v1/Spells/45",
+      "launchUrl": "api/v1/Spells/cometfall",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

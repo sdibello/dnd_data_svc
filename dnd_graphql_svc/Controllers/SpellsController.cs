@@ -9,9 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+
 
 namespace dnd_graphql_svc.Controllers
 {
+
     [ApiController]
     [Route("/api/v1/[controller]")]
     public class SpellsController : Controller
@@ -19,13 +24,16 @@ namespace dnd_graphql_svc.Controllers
         private readonly dndContext _context;
         //public Search.Search _find;
 
+        private readonly ILogger<SpellsController> _logger;
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public SpellsController(dndContext context)
+        public SpellsController(dndContext context, ILogger<SpellsController> logger)
         {
+            _logger = logger;
             _context = context;
             //_find = new Search.Search();
         }
@@ -40,11 +48,11 @@ namespace dnd_graphql_svc.Controllers
 
             if (results != null)
             {
-                Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+                _logger.LogInformation(string.Format("{0}/class - GetSpellClassLevel - results {1}!", id, results.Count().ToString()));
                 return results;
             };
 
-            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
+            _logger.LogInformation(string.Format("{0}/class - GetSpellClassLevel - no results!", id));
             return NotFound();
         }
 
@@ -57,12 +65,21 @@ namespace dnd_graphql_svc.Controllers
             var spelllogic = new dnd_service_logic.BL.SpellLogic();
 
             results = spelllogic.getSpells(id);
+            _logger.LogError("test");
+            _logger.LogDebug("test");
 
-            if (results != null)
+            try
             {
-                Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-                return results;
-            };
+                if (results != null)
+                {
+                    _logger.LogInformation(string.Format("{0}/class - GetSpell - results {1}!", id, results.Count().ToString()));
+                    return results;
+                };
+            }
+            catch ( Exception ex)
+            {
+                throw ex;
+            }
 
             Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
             return NotFound();
@@ -78,7 +95,7 @@ namespace dnd_graphql_svc.Controllers
  
             if (results != null)
             {
-                Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - returned {0} results", results.Count()));
+                _logger.LogInformation(string.Format("{0}/class - School - results {1}!", id, results.Count().ToString()));
                 return results;
             }
 
@@ -132,17 +149,17 @@ namespace dnd_graphql_svc.Controllers
             {
                 if (results.Count != 0)
                 {
-                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
+                    _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
                     return results;
                 }
                 else
                 {
-                    Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
+                    _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
                     return NotFound();
                 }
             };
 
-            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
+            _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
             return NotFound();
         }
 
