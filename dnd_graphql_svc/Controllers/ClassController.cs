@@ -27,7 +27,7 @@ namespace dnd_graphql_svc.Controllers
             _context = context;
         }
 
-        // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFra meworkCore.Sqlite
+        // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFrameworkCore.Sqlite
         // GET: api/Spells/5
         [HttpGet("{id}")]
         public async Task<ActionResult<List<DndCharacterclass>>> GetClass(string id)

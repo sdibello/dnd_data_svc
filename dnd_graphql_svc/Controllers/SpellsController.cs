@@ -103,6 +103,7 @@ namespace dnd_graphql_svc.Controllers
             return NotFound();
         }
 
+        //This is to fill the search index, which really isn't used currently
         [HttpGet("{id}/index")]
         public async Task<ActionResult<DndSpell>> updateIndex()
         {
@@ -162,6 +163,7 @@ namespace dnd_graphql_svc.Controllers
             _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
             return NotFound();
         }
+
 
 
     }
