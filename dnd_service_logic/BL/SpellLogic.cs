@@ -190,7 +190,7 @@ namespace dnd_service_logic.BL
 
             if (spelldb != null)
             {
-                if (result.Count > 0)
+                if (spelldb.Count > 0)
                 {
                     foreach (var s in spelldb)
                     {

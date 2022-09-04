@@ -70,7 +70,7 @@ namespace dnd_graphql_svc.Controllers
             {
                 if (results != null)
                 {
-                    _logger.LogInformation(string.Format("{0} - GetSpell - parameter {1}!", id));
+                    _logger.LogInformation(string.Format("log - GetSpell - parameter {0}!",  id));
                     return results;
                 };
             }
