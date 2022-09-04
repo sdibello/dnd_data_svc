@@ -35,4 +35,8 @@
     <ProjectReference Include="..\dnd_service_logic\dnd_service_logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

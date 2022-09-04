@@ -22,8 +22,6 @@ namespace dnd_graphql_svc.Controllers
     public class SpellsController : Controller
     {
         private readonly dndContext _context;
-        //public Search.Search _find;
-
         private readonly ILogger<SpellsController> _logger;
 
         public IActionResult Index()

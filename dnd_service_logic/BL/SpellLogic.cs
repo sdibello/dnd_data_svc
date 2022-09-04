@@ -168,7 +168,6 @@ namespace dnd_service_logic.BL
 
                     }
 
-
                     if (data.Count == 0)
                         return null;
                     return data;
@@ -184,57 +183,51 @@ namespace dnd_service_logic.BL
 
         public List<Spell> getSpells(string spell)
         {
-            int intId;
             List<DndSpell> spelldb;
-            List<Spell> result =  new List<Spell>();
-            List<SpellSearch> searchresults;
+            List<Spell> result =  new();
 
             spelldb = getDBSpell(spell);
 
             if (spelldb != null)
             {
-                foreach (var s in spelldb)
+                if (result.Count > 0)
                 {
-                    result.Add( new Spell
+                    foreach (var s in spelldb)
                     {
-                        Id = s.Id,
-                        Description = s.Description,
-                        Name = s.Name,
-                        CastingTime = s.CastingTime,
-                        Range = s.Range,
-                        SavingThrow = s.SavingThrow,
-                        SpellResistance = s.SpellResistance,
-                        Duration = s.Duration,
-                        Target = s.Target,
-                        Slug = s.Slug,
-                        SubSchoolId = s.SubSchoolId,
-                        SchoolId = s.SchoolId,
-                        ArcaneFocusComponent = s.ArcaneFocusComponent,
-                        DivineFocusComponent = s.DivineFocusComponent,
-                        MaterialComponent = s.MaterialComponent,
-                        SomaticComponent = s.SomaticComponent,
-                        VerbalComponent = s.VerbalComponent,
-                        XpComponent = s.XpComponent,
-                        RulebookId = s.RulebookId
-                    });
+                        result.Add(new Spell
+                        {
+                            Id = s.Id,
+                            Description = s.Description,
+                            Name = s.Name,
+                            CastingTime = s.CastingTime,
+                            Range = s.Range,
+                            SavingThrow = s.SavingThrow,
+                            SpellResistance = s.SpellResistance,
+                            Duration = s.Duration,
+                            Target = s.Target,
+                            Slug = s.Slug,
+                            SubSchoolId = s.SubSchoolId,
+                            SchoolId = s.SchoolId,
+                            ArcaneFocusComponent = s.ArcaneFocusComponent,
+                            DivineFocusComponent = s.DivineFocusComponent,
+                            MaterialComponent = s.MaterialComponent,
+                            SomaticComponent = s.SomaticComponent,
+                            VerbalComponent = s.VerbalComponent,
+                            XpComponent = s.XpComponent,
+                            RulebookId = s.RulebookId
+                        });
+                    }
+                    return result;
                 }
+                else
+                {
+                    Console.WriteLine(string.Format("log - get spell - ({0}), WARN not found", spell));
+                    return result;
+                };
             }
 
-            if (result.Count > 0)
-            {
-                //log doesn't make sense with multiple possibly returned
-                //Console.WriteLine(string.Format("log - get spell - ({0}) name = {1}", longId, spelldb.First().Name));
-                return result;
-            };
-
-            //if (long.TryParse(longId, out intId) == false)
-            //{
-                //    searchresults = _find.WildcardSearch(id);
-                //    spell.search = searchresults;
-            //}
-
-            Console.WriteLine(string.Format("log - get spell - ({0}) - 404, not found", spell));
-            return result;
+            Console.WriteLine(string.Format("log - get spell - ({0}), ERROR should not have gotten here.", spell));
+            return null;
         }
 
     }
