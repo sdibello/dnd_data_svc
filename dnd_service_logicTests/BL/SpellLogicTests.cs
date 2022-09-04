@@ -43,6 +43,29 @@ namespace dnd_service_logic.BL.Tests
             Assert.IsTrue(result.Count == 0);
         }
 
+        [TestMethod()]
+        public void GetSpellTest_byNameWithSpaceCAPS()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpells("magic MISSILE");
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod()]
+        public void GetSpellTest_byNameWithSpace()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpells("magic missile");
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod()]
+        public void GetSpellTest_bySlug()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpells("magic_missile");
+            Assert.IsNotNull(result);
+        }
 
     }
 }
