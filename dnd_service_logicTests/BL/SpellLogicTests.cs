@@ -11,7 +11,7 @@ namespace dnd_service_logic.BL.Tests
     public class SpellLogicTests
     {
         [TestMethod()]
-        public void getSpellTest_byID()
+        public void GetSpellTest_byID()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("45");
@@ -19,7 +19,7 @@ namespace dnd_service_logic.BL.Tests
         }
 
         [TestMethod()]
-        public void getSpellTest_byIDfail()
+        public void GetSpellTest_byIDfail()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("232345");
@@ -28,7 +28,7 @@ namespace dnd_service_logic.BL.Tests
 
 
         [TestMethod()]
-        public void getSpellTest_byName()
+        public void GetSpellTest_byName()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("Cometfall");
@@ -36,7 +36,7 @@ namespace dnd_service_logic.BL.Tests
         }
 
         [TestMethod()]
-        public void getSpellTest_byNamefail()
+        public void GetSpellTest_byNamefail()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("Cometfaller");

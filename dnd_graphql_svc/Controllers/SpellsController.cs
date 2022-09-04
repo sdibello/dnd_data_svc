@@ -70,13 +70,13 @@ namespace dnd_graphql_svc.Controllers
             {
                 if (results != null)
                 {
-                    _logger.LogInformation(string.Format("{0}/class - GetSpell - results {1}!", id, results.Count().ToString()));
+                    _logger.LogInformation(string.Format("{0} - GetSpell - parameter {1}!", id));
                     return results;
                 };
             }
             catch ( Exception ex)
             {
-                throw ex;
+                _logger.LogInformation(string.Format("{0} - GetSpell - error message {1}!", id, ex.Message));
             }
 
             Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));

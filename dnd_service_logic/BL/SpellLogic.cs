@@ -21,7 +21,7 @@ namespace dnd_service_logic.BL
         public List<SpellCL> getSpellsByClassAndLevel(string CasterClass, string CasterLevel)
         {
             long level;
-            SpellQuery sq = new SpellQuery();
+            SpellQuery sq = new();
 
             Console.WriteLine(string.Format("log - SpellQuery - SpellsByClassAndLevel - ByClassAndLevel PARAMS {0} {1}", CasterClass, CasterLevel));
 
@@ -29,12 +29,12 @@ namespace dnd_service_logic.BL
             {
                 //Get Class and Level data from the database.
                 var query = sq.Query_SpellsByClassAndLevel(CasterClass, level).ToList();
-                List<SpellCL> data = new List<SpellCL>();
+                List<SpellCL> data = new();
 
                 //Format the data from the query into a DTO and pass.
                 foreach (var item in query.ToList())
                 {
-                    SpellCL i = new SpellCL();
+                    SpellCL i = new();
                     i.ClassId = item.ClassId;
                     i.ClassName = item.ClassName;
                     i.Level = item.LevelForClass;
@@ -62,8 +62,8 @@ namespace dnd_service_logic.BL
         public List<SpellSchoolSubSchool> getSchools(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - getSchools - PARAMS {0}", spell));
-            SpellQuery sq = new SpellQuery();
-            List<SpellSchoolSubSchool> result = new List<SpellSchoolSubSchool>();
+            SpellQuery sq = new();
+            List<SpellSchoolSubSchool> result = new();
             List<DndSpell> spellResult = null;
 
             try
@@ -112,7 +112,7 @@ namespace dnd_service_logic.BL
         public List<DndSpell> getDBSpell(string spell)
         {
             List<DndSpell> spelldb;
-            SpellQuery sq = new SpellQuery();
+            SpellQuery sq = new();
             // get the spell #refactor
             if (long.TryParse(spell, out long longId))
             {
@@ -135,9 +135,9 @@ namespace dnd_service_logic.BL
         public List<SpellCL> getClass(string spell)
         {
             Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
-            SpellQuery sq = new SpellQuery();
-            List<dnd_dal.DndSpell> spellResult = new List<dnd_dal.DndSpell>();
-            List<SpellCL> data = new List<SpellCL>();
+            SpellQuery sq = new();
+            List<dnd_dal.DndSpell> spellResult = new();
+            List<SpellCL> data = new();
 
             try
             {
