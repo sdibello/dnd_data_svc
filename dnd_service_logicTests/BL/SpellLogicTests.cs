@@ -60,6 +60,15 @@ namespace dnd_service_logic.BL.Tests
         }
 
         [TestMethod()]
+        public void GetSpellTest_byNameWithSpaceFail()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpells("magic missiled");
+            Assert.IsNotNull(result);
+        }
+
+
+        [TestMethod()]
         public void GetSpellTest_bySlug()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
