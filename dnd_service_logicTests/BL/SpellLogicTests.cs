@@ -67,5 +67,13 @@ namespace dnd_service_logic.BL.Tests
             Assert.IsNotNull(result);
         }
 
+        [TestMethod()]
+        public void GetSpellTest_bySlugFail()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpells("magic_missileed");
+            Assert.IsTrue(result.Count == 0);
+        }
+
     }
 }
