@@ -46,7 +46,7 @@ namespace dnd_graphql_svc.Controllers
 
             if (results != null)
             {
-                _logger.LogInformation(string.Format("{0}/class - GetSpellClassLevel - results {1}!", id, results.Count().ToString()));
+                _logger.LogInformation(string.Format("{0}/class - GetSpellClassLevel - results {1}!", id, results.Count.ToString()));
                 return results;
             };
 
@@ -93,7 +93,7 @@ namespace dnd_graphql_svc.Controllers
  
             if (results != null)
             {
-                _logger.LogInformation(string.Format("{0}/class - School - results {1}!", id, results.Count().ToString()));
+                _logger.LogInformation(string.Format("{0}/class - School - results {1}!", id, results.Count.ToString()));
                 return results;
             }
 

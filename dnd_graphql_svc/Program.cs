@@ -14,7 +14,23 @@ namespace dnd_graphql_svc
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            Log.Logger = new LoggerConfiguration()
+               .Enrich.FromLogContext()
+               .MinimumLevel.Debug()
+               .WriteTo.Console()
+               .WriteTo.File("log.txt", rollingInterval:RollingInterval.Day)
+               .CreateLogger();
+            //.WriteTo.Console( Serilog.Events.LogEventLevel.Verbose,"{NewLine}{Timestamp:HH:mm:ss} [{Level}] ({CorrelationToken}) {Message}{NewLine}{Exception}")
+
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            finally 
+            {
+                Log.CloseAndFlush();
+            }
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
