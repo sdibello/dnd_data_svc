@@ -159,6 +159,7 @@ namespace dnd_graphql_svc.Controllers
             };
 
             _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
+            //TODO return invalid parameter with a message here.
             return NotFound();
         }
 

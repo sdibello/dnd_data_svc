@@ -10,12 +10,14 @@ namespace dnd_service_logic.BL.Tests
     [TestClass()]
     public class SpellLogicTests
     {
+        #region Spell Get Tests
+
         [TestMethod()]
         public void GetSpellTest_byID()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("45");
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod()]
@@ -32,7 +34,7 @@ namespace dnd_service_logic.BL.Tests
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("Cometfall");
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod()]
@@ -48,7 +50,7 @@ namespace dnd_service_logic.BL.Tests
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("magic MISSILE");
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod()]
@@ -56,7 +58,7 @@ namespace dnd_service_logic.BL.Tests
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("magic missile");
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod()]
@@ -64,7 +66,7 @@ namespace dnd_service_logic.BL.Tests
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("magic missiled");
-            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count == 0);
         }
 
 
@@ -72,8 +74,8 @@ namespace dnd_service_logic.BL.Tests
         public void GetSpellTest_bySlug()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
-            var result = sl.getSpells("magic_missile");
-            Assert.IsNotNull(result);
+            var result = sl.getSpells("magic-missile");
+            Assert.IsTrue(result.Count > 0);
         }
 
         [TestMethod()]
@@ -82,6 +84,93 @@ namespace dnd_service_logic.BL.Tests
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSpells("magic_missileed");
             Assert.IsTrue(result.Count == 0);
+        }
+
+        #endregion
+
+        #region Get Spells By Class and Level
+
+        [TestMethod()]
+        public void GetSpellsByClassAndLevelTest()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpellsByClassAndLevel("WIZARD", "2");
+            Assert.IsTrue(result.Count > 0);
+        }
+
+        [TestMethod()]
+        public void GetSpellsByClassAndLevelTestTwo()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpellsByClassAndLevel("wizard", "2");
+            Assert.IsTrue(result.Count > 0);
+        }
+
+        [TestMethod()]
+        public void GetSpellsByClassAndLevelTest_fail()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpellsByClassAndLevel("Wizard", "12");
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod()]
+        public void GetSpellsByClassAndLevelTest_failTwo()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpellsByClassAndLevel("Dog", "2");
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod()]
+        public void GetSpellsByClassAndLevelTest_reversed()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpellsByClassAndLevel("2", "wizard");
+            Assert.IsNull(result);
+        }
+
+        [TestMethod()]
+        public void GetSpellsByClassAndLevelTest_spelledOut()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSpellsByClassAndLevel("wizard", "two");
+            Assert.IsNull(result);
+        }
+
+
+        #endregion
+
+        [TestMethod()]
+        public void getSchoolsTest_BySlug()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSchools("magic-missile");
+            Assert.IsTrue(result.Count > 0);
+        }
+
+        [TestMethod()]
+        public void getSchoolsTest_fail()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSchools("magic-missiled");
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod()]
+        public void getSchoolsTest_byNumber()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSchools("123");
+            Assert.IsTrue(result.Count > 0);
+        }
+
+        [TestMethod()]
+        public void getSchoolsTest_byPlainName()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSchools("fireball");
+            Assert.IsTrue(result.Count > 0);
         }
 
     }
