@@ -83,7 +83,7 @@ namespace dnd_graphql_svc.Controllers
             return NotFound();
         }
 
-        [HttpGet("{id}/school")]
+        [HttpGet("{id}/school")] 
         public ActionResult<List<SpellSchoolSubSchool>> School(string id)
         {
             List<SpellSchoolSubSchool> results;
