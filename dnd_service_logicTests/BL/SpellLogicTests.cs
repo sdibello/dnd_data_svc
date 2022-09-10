@@ -180,7 +180,7 @@ namespace dnd_service_logic.BL.Tests
         {
             dnd_service_logic.BL.SpellLogic sl = new();
             var result = sl.getSchools("fireballsd");
-            Assert.IsNull(result);
+            Assert.IsTrue(result.Count == 0);
         }
 
 
