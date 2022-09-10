@@ -141,6 +141,8 @@ namespace dnd_service_logic.BL.Tests
 
         #endregion
 
+        #region get schools
+
         [TestMethod()]
         public void getSchoolsTest_BySlug()
         {
@@ -172,6 +174,45 @@ namespace dnd_service_logic.BL.Tests
             var result = sl.getSchools("fireball");
             Assert.IsTrue(result.Count > 0);
         }
+
+        [TestMethod()]
+        public void getSchoolsTest_byPlainNameFail()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSchools("fireballsd");
+            Assert.IsNull(result);
+        }
+
+
+        #endregion
+
+        #region Get Class
+
+        [TestMethod()]
+        public void getClassTest()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getClass("fireball");
+            Assert.IsTrue(result.Count > 0);
+        }
+
+        [TestMethod()]
+        public void getClassTestbyID()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getClass("123");
+            Assert.IsTrue(result.Count > 0);
+        }
+
+        [TestMethod()]
+        public void getClassTest_fail()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getClass("asdfasdf");
+            Assert.IsNull(result);
+        }
+
+        #endregion
 
     }
 }
