@@ -168,6 +168,17 @@ namespace dnd_service_logic.BL.Tests
         }
 
         [TestMethod()]
+        public void getSchoolsTest_bySubSchool()
+        {
+            dnd_service_logic.BL.SpellLogic sl = new();
+            var result = sl.getSchools("Restoration");
+            Assert.IsTrue(result.Count == 2);
+        }
+
+
+        
+
+        [TestMethod()]
         public void getSchoolsTest_byPlainName()
         {
             dnd_service_logic.BL.SpellLogic sl = new();
