@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using dnd_dal;
 using dnd_dal.query.CharacterClass;
 using System.Linq;
 using System.Web;
 using dnd_service_logic.dto;
 using dnd_dal.query.spell;
+using dnd_dal.dao;
 
 namespace dnd_service_logic.BL
 {

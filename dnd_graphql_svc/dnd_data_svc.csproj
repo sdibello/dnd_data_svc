@@ -50,7 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dnd_dal\dnd_dal.csproj" />
+    <ProjectReference Include="..\dnd_dal\dnd_dal.csproj">
+      <Private>True</Private>
+      <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
     <ProjectReference Include="..\dnd_service_logic\dnd_service_logic.csproj" />
   </ItemGroup>
 

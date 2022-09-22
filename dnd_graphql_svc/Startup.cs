@@ -29,7 +29,7 @@ namespace dnd_graphql_svc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddDbContext<dnd_dal.dndContext>();
+            services.AddDbContext<dnd_dal.dao.dndContext>();
             services.AddControllers();
         }
 

@@ -1,13 +1,13 @@
 ﻿using dnd_dal.query.feat;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
-using dnd_dal;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Linq;
 using dnd_service_logic.dto;
 using Microsoft.EntityFrameworkCore;
+using dnd_dal.dao;
 
 namespace dnd_service_logic.BL
 {

@@ -1,4 +1,4 @@
-﻿using dnd_dal;
+﻿using dnd_dal.dao;
 using System;
 using System.Collections.Generic;
 using System.Text;

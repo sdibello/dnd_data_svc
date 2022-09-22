@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using dnd_dal;
 using dnd_service_logic;
+using dnd_dal.dao;
 
 namespace dnd_graphql_svc.Controllers
 {
@@ -39,7 +39,7 @@ namespace dnd_graphql_svc.Controllers
         //}
 
         [HttpGet("Rulebook")]
-        public async Task<ActionResult<List<dnd_dal.DndRulebook>>> getRulebooks(string ids)
+        public async Task<ActionResult<List<dnd_dal.dao.DndRulebook>>> getRulebooks(string ids)
         {
             List<DndRulebook> results = new List<DndRulebook>();
             var lookupLogic = new dnd_service_logic.BL.LookupLogic(_context);

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using dnd_dal;
 using System.Linq;
 using dnd_dal.dto;
 using System.ComponentModel.DataAnnotations;
+using dnd_dal.dao;
 
 namespace dnd_dal.query.feat
 {

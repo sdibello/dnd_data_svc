@@ -8,6 +8,7 @@ using dnd_dal;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using dnd_service_logic.dto;
+using dnd_dal.dao;
 
 namespace dnd_graphql_svc.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace dnd_dal
+namespace dnd_dal.dao
 {
     public partial class DndMonster
     {

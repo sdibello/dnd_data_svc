@@ -7,6 +7,7 @@ using dnd_dal;
 using dnd_dal.query.feat;
 using dnd_service_logic.BL;
 using dnd_service_logic.dto;
+using dnd_dal.dao;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

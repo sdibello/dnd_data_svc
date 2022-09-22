@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using dnd_dal.dao;
 using dnd_dal.dto;
 
 namespace dnd_dal.query.spell
@@ -9,7 +10,7 @@ namespace dnd_dal.query.spell
     {
         #region spell
 
-        public List<dnd_dal.DndSpell> Query_dndSpellByID(long spellId )
+        public List<DndSpell> Query_dndSpellByID(long spellId )
         {
             dndContext db = new dndContext();
 
@@ -22,7 +23,7 @@ namespace dnd_dal.query.spell
 
         }
 
-        public List<dnd_dal.DndSpell> Query_dndSpellByName(string name)
+        public List<DndSpell> Query_dndSpellByName(string name)
         {
             dndContext db = new dndContext();
 
@@ -35,7 +36,7 @@ namespace dnd_dal.query.spell
 
         }
 
-        public List<dnd_dal.DndSpell> Query_dndSpellBySlug(string slug)
+        public List<DndSpell> Query_dndSpellBySlug(string slug)
         {
             dndContext db = new dndContext();
 
@@ -57,7 +58,7 @@ namespace dnd_dal.query.spell
         /// </summary>
         /// <param name="ids">long - list of character classes</param>
         /// <returns></returns>
-        public List<dnd_dal.DndCharacterclass> Query_dndCharacterClassByIds(List<long> ids)
+        public List<DndCharacterclass> Query_dndCharacterClassByIds(List<long> ids)
         {
             dndContext db = new dndContext();
 
@@ -80,7 +81,7 @@ namespace dnd_dal.query.spell
         /// </summary>
         /// <param name="id">long - id of the spell you are looking for.</param>
         /// <returns></returns>
-        public List<dnd_dal.DndSpellclasslevel> Query_dndSpellClassLevelBySpellId(long id)
+        public List<DndSpellclasslevel> Query_dndSpellClassLevelBySpellId(long id)
         {
             dndContext db = new dndContext();
 
@@ -237,7 +238,7 @@ namespace dnd_dal.query.spell
         /// </summary>
         /// <param name="schoolId"></param>
         /// <returns></returns>
-        public List<dnd_dal.DndSpellschool> Query_dndSpellSchoolByID(long schoolId)
+        public List<DndSpellschool> Query_dndSpellSchoolByID(long schoolId)
         {
             dndContext db = new dndContext();
 

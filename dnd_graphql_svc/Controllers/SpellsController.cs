@@ -1,4 +1,4 @@
-﻿using dnd_dal;
+﻿using dnd_dal.dao;
 using dnd_service_logic.dto;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;

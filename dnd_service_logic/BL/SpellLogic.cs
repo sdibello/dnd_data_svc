@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using dnd_dal;
 using dnd_dal.query.spell;
 using System.Linq;
 using System.Web;
 using dnd_service_logic.dto;
+using dnd_dal.dao;
 
 namespace dnd_service_logic.BL
 {
@@ -136,7 +136,7 @@ namespace dnd_service_logic.BL
         {
             Console.WriteLine(string.Format("log - SpellQuery - getClass - PARAMS {0}", spell));
             SpellQuery sq = new();
-            List<dnd_dal.DndSpell> spellResult = new();
+            List<DndSpell> spellResult = new();
             List<SpellCL> data = new();
 
             try

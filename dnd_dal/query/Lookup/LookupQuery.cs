@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using dnd_dal.dao;
 using dnd_dal.dto;
 
 namespace dnd_dal.query.Lookup

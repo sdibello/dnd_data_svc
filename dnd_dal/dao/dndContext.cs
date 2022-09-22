@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace dnd_dal
+namespace dnd_dal.dao
 {
     public partial class dndContext : DbContext
     {
@@ -78,7 +78,6 @@ namespace dnd_dal
         {
             if (!optionsBuilder.IsConfigured)
             {
-                #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlite("DataSource=D:\\git\\dnd_graphQL_svc\\dnd_graphql_svc\\Data\\dnd.sqlite");
             }
         }
