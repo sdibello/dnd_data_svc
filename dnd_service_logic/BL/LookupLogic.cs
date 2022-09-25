@@ -49,7 +49,6 @@ namespace dnd_service_logic.BL
 
             try
             {
-                List<DndRulebook> data;
                 // get the spell #refactor
                 lookupResult = lq.Query_dndRuleBooks(ids).ToList();
 

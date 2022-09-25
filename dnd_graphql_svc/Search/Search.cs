@@ -16,8 +16,7 @@ namespace dnd_graphql_svc.Search
         const String _indexPath = @"C:\Index\";
         
         StandardAnalyzer _analyzer = new StandardAnalyzer(_AppLuceneVersion);
-        IndexWriterConfig _indexConfig = null;
-
+        //IndexWriterConfig _indexConfig = null;
 
         public void Load()
         {

@@ -36,7 +36,6 @@ namespace dnd_service_logic.BL
 
         public List<ClassSpell> getclassSpells(string classParam)
         {
-            List<DndCharacterclass> classdb;
             CharacterClassQuery ccq = new CharacterClassQuery();
             SpellQuery sq = new SpellQuery();
             List<ClassSpell> result = new List<ClassSpell>();

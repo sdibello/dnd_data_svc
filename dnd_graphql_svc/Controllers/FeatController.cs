@@ -24,8 +24,6 @@ namespace dnd_graphql_svc.Controllers
             return View();
         }
 
-        private readonly dndContext _context;
-        private FeatQuery _query;
 
         public FeatController()
         {
