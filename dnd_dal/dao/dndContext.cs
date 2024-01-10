@@ -78,7 +78,7 @@ namespace dnd_dal.dao
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("DataSource=D:\\git\\dnd_graphQL_svc\\dnd_graphql_svc\\Data\\dnd.sqlite");
+                optionsBuilder.UseSqlite("DataSource=D:\\git\\dnd_data_svc\\dnd_graphql_svc\\Data\\dnd.sqlite");
             }
         }
 
