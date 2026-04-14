@@ -1,73 +1,50 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using dnd_dal;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
-using dnd_service_logic.dto;
 using dnd_dal.dao;
+using dnd_service_logic.BL;
+using dnd_service_logic.dto;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace dnd_graphql_svc.Controllers
 {
     [ApiController]
-    [Route("/api/v1/[controller]")]
-    public class ClassController : Controller
+    [Route("api/v1/[controller]")]
+    public class ClassController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly IClassLogic _classLogic;
+        private readonly ILogger<ClassController> _logger;
+
+        public ClassController(IClassLogic classLogic, ILogger<ClassController> logger)
         {
-            return View();
+            _classLogic = classLogic;
+            _logger = logger;
         }
 
-        private readonly dndContext _context;
-
-        public ClassController(dndContext context)
-        {
-            _context = context;
-        }
-
-        // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFrameworkCore.Sqlite
-        // GET: api/Spells/5
         [HttpGet("{id}")]
         public async Task<ActionResult<List<DndCharacterclass>>> GetClass(string id)
         {
-            List<DndCharacterclass> results;
-            var characterclasslogic = new dnd_service_logic.BL.ClassLogic();
-
-            results = characterclasslogic.getDBClass(id);
-
-            if (results != null)
+            var results = await _classLogic.GetDbClassAsync(id);
+            if (results.Count == 0)
             {
-                Console.WriteLine(string.Format("log - GetClass - id = {0}", id));
-                return results;
-            };
+                _logger.LogInformation("Class lookup returned no results for {ClassId}", id);
+                return NotFound();
+            }
 
-            Console.WriteLine(string.Format("log - GetClass - id = {0}", id));
-            return NotFound();
-
-
+            return results;
         }
 
         [HttpGet("{id}/spells")]
         public async Task<ActionResult<List<ClassSpell>>> GetSpellClassLevel(string id)
         {
-            List<ClassSpell> results;
-            var characterclasslogic = new dnd_service_logic.BL.ClassLogic();
-
-            // get the character class ID
-            results = characterclasslogic.getclassSpells(id);
-            var ordered = results.OrderBy(c => c.Level).ThenBy(c => c.SpellName);
-
-            if (ordered != null)
+            var results = await _classLogic.GetClassSpellsAsync(id);
+            if (results.Count == 0)
             {
-                Console.WriteLine(string.Format("log -GetSpellClassLevel - id = {0}", id));
-                return ordered.ToList();
-            };
+                _logger.LogInformation("Class spell lookup returned no results for {ClassId}", id);
+                return NotFound();
+            }
 
-            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-            return NotFound();
+            return results;
         }
     }
 }

@@ -1,169 +1,126 @@
-﻿using dnd_dal.dao;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using dnd_dal.dao;
+using dnd_service_logic.BL;
 using dnd_service_logic.dto;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Serilog;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-
 
 namespace dnd_graphql_svc.Controllers
 {
-
     [ApiController]
-    [Route("/api/v1/[controller]")]
-    public class SpellsController : Controller
+    [Route("api/v1/[controller]")]
+    public class SpellsController : ControllerBase
     {
         private readonly dndContext _context;
+        private readonly ISpellLogic _spellLogic;
         private readonly ILogger<SpellsController> _logger;
 
-        public IActionResult Index()
+        public SpellsController(dndContext context, ISpellLogic spellLogic, ILogger<SpellsController> logger)
         {
-            return View();
-        }
-
-        public SpellsController(dndContext context, ILogger<SpellsController> logger)
-        {
-            _logger = logger;
             _context = context;
-            //_find = new Search.Search();
+            _spellLogic = spellLogic;
+            _logger = logger;
         }
 
         [HttpGet("{id}/class")]
         public async Task<ActionResult<List<SpellCL>>> GetSpellClassLevel(string id)
         {
-            List<SpellCL> results;
-            var spelllogic = new dnd_service_logic.BL.SpellLogic();
-
-            results = spelllogic.getClass(id);
-
-            if (results != null)
+            var results = await _spellLogic.GetClassAsync(id);
+            if (results.Count == 0)
             {
-                _logger.LogInformation(string.Format("{0}/class - GetSpellClassLevel - results {1}!", id, results.Count.ToString()));
-                return results;
-            };
+                _logger.LogInformation("Spell class lookup returned no results for {SpellId}", id);
+                return NotFound();
+            }
 
-            _logger.LogInformation(string.Format("{0}/class - GetSpellClassLevel - no results!", id));
-            return NotFound();
+            _logger.LogInformation("Spell class lookup returned {Count} results for {SpellId}", results.Count, id);
+            return results;
         }
 
-        // Scaffold-DbContext "DataSource=D:\git\dnd_dal\dnd_dal\DataAccess\dnd.sqlite" Microsoft.EntityFra meworkCore.Sqlite
-        // GET: api/Spells/5
         [HttpGet("{id}")]
         public async Task<ActionResult<List<Spell>>> GetSpell(string id)
         {
-            List<Spell> results;
-            var spelllogic = new dnd_service_logic.BL.SpellLogic();
-
-            results = spelllogic.getSpells(id);
-            _logger.LogError("test");
-            _logger.LogDebug("test");
-
-            try
+            var results = await _spellLogic.GetSpellsAsync(id);
+            if (results.Count == 0)
             {
-                if (results != null)
-                {
-                    _logger.LogInformation(string.Format("log - GetSpell - parameter {0}!",  id));
-                    return results;
-                };
-            }
-            catch ( Exception ex)
-            {
-                _logger.LogInformation(string.Format("{0} - GetSpell - error message {1}!", id, ex.Message));
+                _logger.LogInformation("Spell lookup returned no results for {SpellId}", id);
+                return NotFound();
             }
 
-            Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-            return NotFound();
+            _logger.LogInformation("Spell lookup returned {Count} results for {SpellId}", results.Count, id);
+            return results;
         }
 
-        [HttpGet("{id}/school")] 
-        public ActionResult<List<SpellSchoolSubSchool>> School(string id)
+        [HttpGet("{id}/school")]
+        public async Task<ActionResult<List<SpellSchoolSubSchool>>> School(string id)
         {
-            List<SpellSchoolSubSchool> results;
-            var logic = new dnd_service_logic.BL.SpellLogic();
-
-            results = logic.getSchools(id);
- 
-            if (results != null)
+            var results = await _spellLogic.GetSchoolsAsync(id);
+            if (results.Count == 0)
             {
-                _logger.LogInformation(string.Format("{0}/class - School - results {1}!", id, results.Count.ToString()));
-                return results;
+                _logger.LogInformation("Spell school lookup returned no results for {SpellId}", id);
+                return NotFound();
             }
 
-            Console.WriteLine(string.Format("log - searchSpellByClassAndLevel - Schools - 404 Not found"));
-            return NotFound();
+            _logger.LogInformation("Spell school lookup returned {Count} results for {SpellId}", results.Count, id);
+            return results;
         }
 
-        //This is to fill the search index, which really isn't used currently
-        [HttpGet("{id}/index")]
-        public async Task<ActionResult<DndSpell>> updateIndex()
+        [HttpPost("index")]
+        public async Task<ActionResult> UpdateIndex()
         {
-            var AppLuceneVersion = Lucene.Net.Util.LuceneVersion.LUCENE_48;
+            var appLuceneVersion = Lucene.Net.Util.LuceneVersion.LUCENE_48;
+            var indexLocation = Path.Combine(AppContext.BaseDirectory, "Search", "index", "spells");
+            Directory.CreateDirectory(indexLocation);
 
-            var indexLocation = @"C:\Index";
-            var dir = FSDirectory.Open(indexLocation);
+            using var dir = FSDirectory.Open(indexLocation);
+            using var analyzer = new StandardAnalyzer(appLuceneVersion);
+            using var writer = new IndexWriter(dir, new IndexWriterConfig(appLuceneVersion, analyzer));
 
-            var analyzer = new StandardAnalyzer(AppLuceneVersion);
+            writer.DeleteAll();
 
-            var indexconfig = new Lucene.Net.Index.IndexWriterConfig(AppLuceneVersion, analyzer);
-            var write = new IndexWriter(dir, indexconfig);
-
-            var data = _context.DndSpell.ToList();
-
+            var data = await _context.DndSpell.AsNoTracking().ToListAsync();
             foreach (var spell in data)
             {
-                Document doc = new Document
+                var doc = new Document
                 {
-                    new StringField("name", spell.Name,Field.Store.YES),
-                    new StringField("search_name", spell.Name.ToLower(),Field.Store.YES),
-                    new StringField("id", spell.Id.ToString(),Field.Store.YES),
-                    //new StringField("desc", spell.Description.ToLower(),Field.Store.YES),
-                    new StringField("slug", spell.Slug.ToLower(),Field.Store.YES),
+                    new StringField("name", spell.Name, Field.Store.YES),
+                    new StringField("search_name", spell.Name.ToLower(), Field.Store.YES),
+                    new StringField("id", spell.Id.ToString(), Field.Store.YES),
+                    new StringField("slug", spell.Slug.ToLower(), Field.Store.YES)
                 };
 
-                Console.WriteLine(string.Format(" writing {0}", spell.Name));
-                write.AddDocument(doc);
-                write.Flush(triggerMerge: false, applyAllDeletes: false);
-                write.Commit();
+                writer.AddDocument(doc);
             }
 
-            return NotFound();
+            writer.Commit();
+            _logger.LogInformation("Rebuilt spell index with {Count} documents", data.Count);
+            return Ok(new { indexed = data.Count });
         }
 
-        [HttpGet("{casterClass}/{casterlevel}")]
-        public async Task<ActionResult<List<SpellCL>>> searchSpellByClassAndLevel(String casterClass, string casterlevel)
+        [HttpGet("{casterClass}/{casterLevel}")]
+        public async Task<ActionResult<List<SpellCL>>> SearchSpellByClassAndLevel(string casterClass, string casterLevel)
         {
-
-            var logic = new dnd_service_logic.BL.SpellLogic();
-            var results = logic.getSpellsByClassAndLevel(casterClass, casterlevel);
-
-            if (results != null)
+            if (!long.TryParse(casterLevel, out _))
             {
-                if (results.Count != 0)
-                {
-                    _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - returned {2} results", casterClass, casterlevel, results.Count()));
-                    return results;
-                }
-                else
-                {
-                    _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController - NO RESULTS", casterClass, casterlevel));
-                    return NotFound();
-                }
-            };
+                return BadRequest("casterLevel must be numeric.");
+            }
 
-            _logger.LogInformation(string.Format("log - searchSpellByClassAndLevel - SpellController = {0}/{1} - NOT FOUND", casterClass, casterlevel));
-            //TODO return invalid parameter with a message here.
-            return NotFound();
+            var results = await _spellLogic.GetSpellsByClassAndLevelAsync(casterClass, casterLevel);
+            if (results.Count == 0)
+            {
+                _logger.LogInformation("Spell class/level lookup returned no results for {CasterClass}/{CasterLevel}", casterClass, casterLevel);
+                return NotFound();
+            }
+
+            _logger.LogInformation("Spell class/level lookup returned {Count} results for {CasterClass}/{CasterLevel}", results.Count, casterClass, casterLevel);
+            return results;
         }
-
-
-
     }
 }

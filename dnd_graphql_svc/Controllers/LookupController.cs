@@ -1,69 +1,54 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using dnd_service_logic;
 using dnd_dal.dao;
+using dnd_service_logic.BL;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace dnd_graphql_svc.Controllers
 {
     [ApiController]
-    [Route("/api/v1/[controller]")]
-
-    public class LookupController : Controller
+    [Route("api/v1/[controller]")]
+    public class LookupController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly ILookupLogic _lookupLogic;
+        private readonly ILogger<LookupController> _logger;
+
+        public LookupController(ILookupLogic lookupLogic, ILogger<LookupController> logger)
         {
-            return View();
+            _lookupLogic = lookupLogic;
+            _logger = logger;
         }
 
-        private readonly dndContext _context;
-
-        //[HttpGet("Rulebook")]
-        //public async Task<ActionResult<List<dnd_dal.DndRulebook>>> getRulebooks()
-        //{
-        //    List<DndRulebook> results;
-        //    var lookupLogic = new dnd_service_logic.BL.LookupLogic(_context);
-
-        //    results = lookupLogic.getRuleBooks();
-
-        //    if (results != null)
-        //    {
-        //        //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-        //        return results;
-        //    };
-
-        //    //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-        //    return NotFound();
-        //}
-
         [HttpGet("Rulebook")]
-        public async Task<ActionResult<List<dnd_dal.dao.DndRulebook>>> getRulebooks(string ids)
+        public async Task<ActionResult<List<DndRulebook>>> GetRulebooks([FromQuery] string? ids)
         {
-            List<DndRulebook> results = new List<DndRulebook>();
-            var lookupLogic = new dnd_service_logic.BL.LookupLogic(_context);
-
-            if(ids!=null)
+            List<DndRulebook> results;
+            if (!string.IsNullOrWhiteSpace(ids))
             {
-                if (ids.Length > 0)
+                try
                 {
-                    List<long> listIds = ids.Split(",").Select(long.Parse).ToList();
-                    results = lookupLogic.getRuleBooks(listIds);
+                    var listIds = ids.Split(',').Select(x => long.Parse(x.Trim())).ToList();
+                    results = await _lookupLogic.GetRuleBooksAsync(listIds);
+                }
+                catch (System.FormatException)
+                {
+                    return BadRequest("ids must be a comma-separated list of numeric values.");
                 }
             }
-            else {
-                results = lookupLogic.getRuleBooks();
+            else
+            {
+                results = await _lookupLogic.GetRuleBooksAsync();
             }
 
-            if (results != null)
+            if (results.Count == 0)
             {
-                //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-                return results;
-            };
+                _logger.LogInformation("Rulebook lookup returned no results for ids {Ids}", ids);
+                return NotFound();
+            }
 
-            //Console.WriteLine(string.Format("log - GetSpellClassLevel - id = {0}", id));
-            return NotFound();
+            return results;
         }
     }
 }

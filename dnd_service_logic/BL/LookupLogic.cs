@@ -1,72 +1,31 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using dnd_dal.query.Lookup;
 using System.Linq;
-using System.Web;
-using dnd_service_logic.dto;
+using System.Threading.Tasks;
 using dnd_dal.dao;
+using Microsoft.EntityFrameworkCore;
 
 namespace dnd_service_logic.BL
 {
-    public class LookupLogic : BaseLogic
+    public class LookupLogic : ILookupLogic
     {
-        public LookupLogic(dndContext databaseContext)
+        private readonly dndContext _db;
+
+        public LookupLogic(dndContext db)
         {
-            base.db = databaseContext;
+            _db = db;
         }
 
-        public List<DndRulebook> getRuleBooks()
+        public Task<List<DndRulebook>> GetRuleBooksAsync()
         {
-            Console.WriteLine(string.Format("log - LookupQuery - getRuleBooks "));
-            LookupQuery lq = new LookupQuery();
-            List<DndRulebook> lookupResult = null;
-
-            try
-            {
-                List<DndRulebook> data;
-                // get the spell #refactor
-                lookupResult = lq.Query_dndRuleBooks().ToList();
-
-                if (lookupResult != null)
-                {
-                    Console.WriteLine(string.Format("log - getRuleBooks - results {0}", lookupResult.Count()));
-                    return lookupResult;
-                };
-            }
-            catch (Exception) {
-                throw;
-            }
-
-            return null;
+            return _db.DndRulebook.AsNoTracking().ToListAsync();
         }
 
-        public List<DndRulebook> getRuleBooks(List<long> ids)
+        public Task<List<DndRulebook>> GetRuleBooksAsync(List<long> ids)
         {
-            Console.WriteLine(string.Format("log - LookupQuery - getRuleBooks "));
-            LookupQuery lq = new LookupQuery();
-            List<DndRulebook> lookupResult = null;
-
-            try
-            {
-                List<DndRulebook> data;
-                // get the spell #refactor
-                lookupResult = lq.Query_dndRuleBooks(ids).ToList();
-
-                if (lookupResult != null)
-                {
-                    Console.WriteLine(string.Format("log - getRuleBooks - results {0}", lookupResult.Count()));
-                    return lookupResult;
-                };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return null;
+            return _db.DndRulebook
+                .AsNoTracking()
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
         }
-
-
     }
 }

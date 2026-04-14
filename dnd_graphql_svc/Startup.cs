@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using dnd_dal.dao;
+using dnd_service_logic.BL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AutoMapper;
 using Serilog;
 
 namespace dnd_graphql_svc
@@ -19,21 +18,27 @@ namespace dnd_graphql_svc
             Configuration = configuration;
 
             Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddDbContext<dnd_dal.dao.dndContext>();
+
+            var connectionString = Configuration.GetConnectionString("DndDatabase")
+                ?? $"Data Source={System.IO.Path.Combine(System.AppContext.BaseDirectory, "Data", "dnd.sqlite")}";
+
+            services.AddDbContext<dndContext>(options => options.UseSqlite(connectionString));
+            services.AddScoped<ISpellLogic, SpellLogic>();
+            services.AddScoped<IFeatLogic, FeatLogic>();
+            services.AddScoped<ILookupLogic, LookupLogic>();
+            services.AddScoped<IClassLogic, ClassLogic>();
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -42,9 +47,7 @@ namespace dnd_graphql_svc
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

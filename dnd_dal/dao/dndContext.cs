@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -78,7 +79,13 @@ namespace dnd_dal.dao
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("DataSource=D:\\git\\dnd_data_svc\\dnd_graphql_svc\\Data\\dnd.sqlite");
+                var dataPath = Path.Combine(AppContext.BaseDirectory, "Data", "dnd.sqlite");
+                if (!File.Exists(dataPath))
+                {
+                    dataPath = Path.Combine(AppContext.BaseDirectory, "dnd.sqlite");
+                }
+
+                optionsBuilder.UseSqlite($"Data Source={dataPath}");
             }
         }
 
@@ -2982,3 +2989,6 @@ namespace dnd_dal.dao
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
+
+
+

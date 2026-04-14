@@ -1,229 +1,164 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
+using System.Threading.Tasks;
 using dnd_service_logic.BL;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
+using dnd_service_logicTests.TestSupport;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace dnd_service_logicTests.BL
 {
-    [TestClass()]
+    [TestClass]
     public class SpellLogicTests
     {
-        #region Spell Get Tests
-
-        [TestMethod()]
-        public void GetSpellTest_byID()
+        [TestMethod]
+        public async Task GetSpells_byId_returnsMatch()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("45");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsAsync("100");
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("Magic Missile", result[0].Name);
         }
 
-        [TestMethod()]
-        public void GetSpellTest_byIDfail()
+        [TestMethod]
+        public async Task GetSpells_bySlug_returnsMatch()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("232345");
-            Assert.IsTrue(result.Count == 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsAsync("magic-missile");
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(100L, result[0].Id);
         }
 
-
-        [TestMethod()]
-        public void GetSpellTest_byName()
+        [TestMethod]
+        public async Task GetSpells_byNameWithSpaces_returnsMatch()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("Cometfall");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsAsync("magic missile");
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("magic-missile", result[0].Slug);
         }
 
-        [TestMethod()]
-        public void GetSpellTest_byNamefail()
+        [TestMethod]
+        public async Task GetSpells_blank_returnsEmptyList()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("Cometfaller");
-            Assert.IsTrue(result.Count == 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsAsync("   ");
+
+            Assert.AreEqual(0, result.Count);
         }
 
-        [TestMethod()]
-        public void GetSpellTest_byNameWithSpaceCAPS()
+        [TestMethod]
+        public async Task GetSpells_urlDecodedName_returnsMatch()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("magic MISSILE");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsAsync("Magic%20Missile");
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(100L, result[0].Id);
         }
 
-        [TestMethod()]
-        public void GetSpellTest_byNameWithSpace()
+        [TestMethod]
+        public async Task GetSpellsByClassAndLevel_valid_returnsResults()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("magic missile");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsByClassAndLevelAsync("wizard", "1");
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("Magic Missile", result[0].SpellName);
         }
 
-        [TestMethod()]
-        public void GetSpellTest_byNameWithSpaceFail()
+        [TestMethod]
+        public async Task GetSpellsByClassAndLevel_unknownClass_returnsEmptyList()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("magic missiled");
-            Assert.IsTrue(result.Count == 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsByClassAndLevelAsync("sorcerer", "1");
+
+            Assert.AreEqual(0, result.Count);
         }
 
-
-        [TestMethod()]
-        public void GetSpellTest_bySlug()
+        [TestMethod]
+        public async Task GetSpellsByClassAndLevel_invalidLevel_returnsEmptyList()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("magic-missile");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSpellsByClassAndLevelAsync("wizard", "two");
+
+            Assert.AreEqual(0, result.Count);
         }
 
-        [TestMethod()]
-        public void GetSpellTest_bySlugFail()
+        [TestMethod]
+        public async Task GetSchools_spellWithSubschool_returnsPrimaryAndSecondary()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpells("magic_missileed");
-            Assert.IsTrue(result.Count == 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSchoolsAsync("summon-ally");
+
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual("Conjuration", result.Single(x => x.isPrimary).SchoolName);
+            Assert.AreEqual("Calling", result.Single(x => !x.isPrimary).SchoolName);
         }
 
-        #endregion
-
-        #region Get Spells By Class and Level
-
-        [TestMethod()]
-        public void GetSpellsByClassAndLevelTest()
+        [TestMethod]
+        public async Task GetSchools_unknownSpell_returnsEmptyList()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpellsByClassAndLevel("WIZARD", "2");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetSchoolsAsync("unknown-spell");
+
+            Assert.AreEqual(0, result.Count);
         }
 
-        [TestMethod()]
-        public void GetSpellsByClassAndLevelTestTwo()
+        [TestMethod]
+        public async Task GetClass_validSpell_returnsClasses()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpellsByClassAndLevel("wizard", "2");
-            Assert.IsTrue(result.Count > 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetClassAsync("magic-missile");
+
+            Assert.AreEqual(2, result.Count);
+            CollectionAssert.AreEquivalent(new[] { "Wizard", "Warmage Adept" }, result.Select(x => x.ClassName).ToArray());
         }
 
-        [TestMethod()]
-        public void GetSpellsByClassAndLevelTest_fail()
+        [TestMethod]
+        public async Task GetClass_unknown_returnsEmptyList()
         {
-            SpellLogic sl = new();
-            var result = sl.getSpellsByClassAndLevel("Wizard", "12");
-            Assert.IsTrue(result.Count == 0);
+            using var factory = new TestDbFactory();
+            using var context = factory.CreateContext();
+            var logic = new SpellLogic(context);
+
+            var result = await logic.GetClassAsync("asdfasdf");
+
+            Assert.AreEqual(0, result.Count);
         }
-
-        [TestMethod()]
-        public void GetSpellsByClassAndLevelTest_failTwo()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSpellsByClassAndLevel("Dog", "2");
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod()]
-        public void GetSpellsByClassAndLevelTest_reversed()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSpellsByClassAndLevel("2", "wizard");
-            Assert.IsNull(result);
-        }
-
-        [TestMethod()]
-        public void GetSpellsByClassAndLevelTest_spelledOut()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSpellsByClassAndLevel("wizard", "two");
-            Assert.IsNull(result);
-        }
-
-
-        #endregion
-
-        #region get schools
-
-        [TestMethod()]
-        public void getSchoolsTest_BySlug()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSchools("magic-missile");
-            Assert.IsTrue(result.Count > 0);
-        }
-
-        [TestMethod()]
-        public void getSchoolsTest_fail()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSchools("magic-missiled");
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod()]
-        public void getSchoolsTest_byNumber()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSchools("123");
-            Assert.IsTrue(result.Count > 0);
-        }
-
-        [TestMethod()]
-        public void getSchoolsTest_bySubSchool()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSchools("Restoration");
-            Assert.IsTrue(result.Count == 2);
-        }
-
-
-
-
-        [TestMethod()]
-        public void getSchoolsTest_byPlainName()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSchools("fireball");
-            Assert.IsTrue(result.Count > 0);
-        }
-
-        [TestMethod()]
-        public void getSchoolsTest_byPlainNameFail()
-        {
-            SpellLogic sl = new();
-            var result = sl.getSchools("fireballsd");
-            Assert.IsTrue(result.Count == 0);
-        }
-
-
-        #endregion
-
-        #region Get Class
-
-        [TestMethod()]
-        public void getClassTest()
-        {
-            SpellLogic sl = new();
-            var result = sl.getClass("fireball");
-            Assert.IsTrue(result.Count > 0);
-        }
-
-        [TestMethod()]
-        public void getClassTestbyID()
-        {
-            SpellLogic sl = new();
-            var result = sl.getClass("123");
-            Assert.IsTrue(result.Count > 0);
-        }
-
-        [TestMethod()]
-        public void getClassTest_fail()
-        {
-            SpellLogic sl = new();
-            var result = sl.getClass("asdfasdf");
-            Assert.IsNull(result);
-        }
-
-        #endregion
-
     }
 }

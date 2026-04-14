@@ -1,69 +1,85 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using dnd_dal.query.CharacterClass;
 using System.Linq;
-using System.Web;
-using dnd_service_logic.dto;
-using dnd_dal.query.spell;
+using System.Threading.Tasks;
 using dnd_dal.dao;
+using dnd_service_logic.dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace dnd_service_logic.BL
 {
-    public class ClassLogic : BaseLogic
+    public class ClassLogic : IClassLogic
     {
-        public List<DndCharacterclass> getDBClass(string classParam)
-        {
-            List<DndCharacterclass> classdb;
-            CharacterClassQuery ccq = new CharacterClassQuery();
-            // get the spell #refactor
-            if (long.TryParse(classParam, out long longId))
-            {
-                classdb = ccq.Query_GetCharacterClassById(longId);
-            }
-            else
-            {
-                if (HttpUtility.UrlDecode(classParam).IndexOf(' ') > 0)
-                {
-                    classdb = ccq.Query_GetCharacterClassBySlug(classParam);
-                } else {
-                    classdb = ccq.Query_GetCharacterClassByName(classParam);
-                }
-            }
+        private readonly dndContext _db;
 
-            return classdb;
+        public ClassLogic(dndContext db)
+        {
+            _db = db;
         }
 
-        public List<ClassSpell> getclassSpells(string classParam)
+        public async Task<List<DndCharacterclass>> GetDbClassAsync(string classParam)
         {
-            List<DndCharacterclass> classdb;
-            CharacterClassQuery ccq = new CharacterClassQuery();
-            SpellQuery sq = new SpellQuery();
-            List<ClassSpell> result = new List<ClassSpell>();
-
-            var charaters = getDBClass(classParam);
-
-            foreach (var dd in charaters)
+            var normalized = Uri.UnescapeDataString(classParam ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(normalized))
             {
-                var classId = dd.Id;
-                var scl = ccq.Query_GetCharacterClassSpellLevel(classId);
-
-                foreach (var classlevel in scl)
-                {
-                    var spell = sq.Query_dndSpellByID(classlevel.SpellId).First();
-                    ClassSpell cs = new ClassSpell
-                    {
-                        ClassId = dd.Id,
-                        ClassName = dd.Name,
-                        Level = classlevel.Level,
-                        SpellId = classlevel.SpellId,
-                        SpellName = spell.Name
-                    };
-                    result.Add(cs);
-                }
+                return new List<DndCharacterclass>();
             }
 
-            return result;
+            IQueryable<DndCharacterclass> query = _db.DndCharacterclass.AsNoTracking();
+
+            if (long.TryParse(normalized, out var longId))
+            {
+                return await query.Where(x => x.Id == longId).ToListAsync();
+            }
+
+            if (normalized.Contains(' '))
+            {
+                return await query.Where(x => x.Name.ToLower() == normalized.ToLower()).ToListAsync();
+            }
+
+            return await query.Where(x => x.Slug.ToLower() == normalized.ToLower()).ToListAsync();
+        }
+
+        public async Task<List<ClassSpell>> GetClassSpellsAsync(string classParam)
+        {
+            var classes = await GetDbClassAsync(classParam);
+            if (classes.Count == 0)
+            {
+                return new List<ClassSpell>();
+            }
+
+            var classIds = classes.Select(x => x.Id).ToList();
+            var spellLevels = await _db.DndSpellclasslevel
+                .AsNoTracking()
+                .Where(x => classIds.Contains(x.CharacterClassId))
+                .ToListAsync();
+
+            if (spellLevels.Count == 0)
+            {
+                return new List<ClassSpell>();
+            }
+
+            var spellIds = spellLevels.Select(x => x.SpellId).Distinct().ToList();
+            var spellNames = await _db.DndSpell
+                .AsNoTracking()
+                .Where(x => spellIds.Contains(x.Id))
+                .ToDictionaryAsync(x => x.Id, x => x.Name);
+
+            var classNames = classes.ToDictionary(x => x.Id, x => x.Name);
+
+            return spellLevels
+                .Where(x => spellNames.ContainsKey(x.SpellId) && classNames.ContainsKey(x.CharacterClassId))
+                .Select(x => new ClassSpell
+                {
+                    ClassId = x.CharacterClassId,
+                    ClassName = classNames[x.CharacterClassId],
+                    Level = x.Level,
+                    SpellId = x.SpellId,
+                    SpellName = spellNames[x.SpellId]
+                })
+                .OrderBy(x => x.Level)
+                .ThenBy(x => x.SpellName)
+                .ToList();
         }
     }
 }

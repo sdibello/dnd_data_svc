@@ -1,88 +1,89 @@
-﻿using dnd_dal.query.feat;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
+using dnd_dal.dao;
 using dnd_service_logic.dto;
 using Microsoft.EntityFrameworkCore;
-using dnd_dal.dao;
 
 namespace dnd_service_logic.BL
 {
-    public class FeatLogic
+    public class FeatLogic : IFeatLogic
     {
-        public  List<DndFeat> GetFeat(string id)
+        private readonly dndContext _db;
+
+        public FeatLogic(dndContext db)
         {
-            long longId;
-            FeatQuery fq = new FeatQuery();
-            List<DndFeat> featdb = new List<DndFeat>();
-
-            if (long.TryParse(id, out longId) == true) 
-            {
-                featdb = fq.Query_dndFeatByID(longId);
-            }
-            else
-            {
-                if (id.IndexOf(' ') > 0) {
-                    featdb = fq.Query_dndFeatByName(id);
-                }
-                else
-                {
-                    featdb = fq.Query_dndFeatBySlug(id);
-                }
-            }
-
-            if (featdb != null)
-            {
-                Console.WriteLine(string.Format("log - get feat - ({0}) ", id));
-            };
-            return featdb;
+            _db = db;
         }
 
-        public FeatTree GetFeatRequirements(string id)
+        public async Task<List<DndFeat>> GetFeatAsync(string id)
         {
-            FeatQuery fq = new FeatQuery();
-            
-            List<DndFeat> feat = GetFeat(id);
-            List<DndFeatrequiresfeat> queryRequired = fq.Query_dndFeatRequiredFeat(feat.First().Id);
-            List<DndFeatrequiresfeat> queryRequiredBy = fq.Query_dndFeatRequiredBy(feat.First().Id);
-            FeatTree data = new FeatTree();
-
-            data.RootFeatid = feat.First().Id;
-            data.RootFeatName = feat.First().Name;
-
-            foreach (var item in queryRequired)
+            var normalized = System.Uri.UnescapeDataString(id ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(normalized))
             {
-                var thisfeat = GetFeat(item.Id.ToString());
-                foreach (var each in thisfeat)
-                {
-                    var bf = new BasicFeat
-                    {
-                        id = each.Id,
-                        name = each.Name
-                    };
-                    data.requiredFeats.Add(bf);
-                }
+                return new List<DndFeat>();
             }
 
-            foreach (var item in queryRequiredBy)
-            {
-                var thisfeat = GetFeat(item.Id.ToString());
-                foreach (var each in thisfeat)
-                {
-                    var bf = new BasicFeat
-                    {
-                        id = each.Id,
-                        name = each.Name
-                    };
-                    data.FeatsRequiredBy.Add(bf);
+            IQueryable<DndFeat> query = _db.DndFeat.AsNoTracking();
 
-                }
+            if (long.TryParse(normalized, out var longId))
+            {
+                return await query.Where(x => x.Id == longId).ToListAsync();
             }
 
-            return data;
+            if (normalized.Contains(' '))
+            {
+                return await query.Where(x => x.Name.ToLower() == normalized.ToLower()).ToListAsync();
+            }
+
+            return await query.Where(x => x.Slug.ToLower() == normalized.ToLower()).ToListAsync();
+        }
+
+        public async Task<FeatTree?> GetFeatRequirementsAsync(string id)
+        {
+            var feat = await GetFeatAsync(id);
+            var rootFeat = feat.FirstOrDefault();
+            if (rootFeat == null)
+            {
+                return null;
+            }
+
+            var relationships = await _db.DndFeatrequiresfeat
+                .AsNoTracking()
+                .Where(x => x.RequiredFeatId == rootFeat.Id || x.SourceFeatId == rootFeat.Id)
+                .ToListAsync();
+
+            var requiredIds = relationships
+                .Where(x => x.SourceFeatId == rootFeat.Id)
+                .Select(x => x.RequiredFeatId)
+                .Distinct()
+                .ToList();
+
+            var requiredByIds = relationships
+                .Where(x => x.RequiredFeatId == rootFeat.Id)
+                .Select(x => x.SourceFeatId)
+                .Distinct()
+                .ToList();
+
+            var relatedIds = requiredIds.Concat(requiredByIds).Distinct().ToList();
+            var relatedFeats = await _db.DndFeat
+                .AsNoTracking()
+                .Where(x => relatedIds.Contains(x.Id))
+                .ToDictionaryAsync(x => x.Id, x => x.Name);
+
+            return new FeatTree
+            {
+                RootFeatid = rootFeat.Id,
+                RootFeatName = rootFeat.Name,
+                requiredFeats = requiredIds
+                    .Where(relatedFeats.ContainsKey)
+                    .Select(x => new BasicFeat { id = x, name = relatedFeats[x] })
+                    .ToList(),
+                FeatsRequiredBy = requiredByIds
+                    .Where(relatedFeats.ContainsKey)
+                    .Select(x => new BasicFeat { id = x, name = relatedFeats[x] })
+                    .ToList()
+            };
         }
     }
 }
