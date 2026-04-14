@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -77,7 +78,7 @@ namespace dnd_graphql_svc.Controllers
         {
             var appLuceneVersion = Lucene.Net.Util.LuceneVersion.LUCENE_48;
             var indexLocation = Path.Combine(AppContext.BaseDirectory, "Search", "index", "spells");
-            Directory.CreateDirectory(indexLocation);
+            System.IO.Directory.CreateDirectory(indexLocation);
 
             using var dir = FSDirectory.Open(indexLocation);
             using var analyzer = new StandardAnalyzer(appLuceneVersion);

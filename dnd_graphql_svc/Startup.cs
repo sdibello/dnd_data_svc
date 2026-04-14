@@ -26,7 +26,14 @@ namespace dnd_graphql_svc
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(cfg =>
+            {
+                var licenseKey = Configuration["AutoMapper:LicenseKey"];
+                if (!string.IsNullOrWhiteSpace(licenseKey))
+                {
+                    cfg.LicenseKey = licenseKey;
+                }
+            }, typeof(Startup));
 
             var connectionString = Configuration.GetConnectionString("DndDatabase")
                 ?? $"Data Source={System.IO.Path.Combine(System.AppContext.BaseDirectory, "Data", "dnd.sqlite")}";
