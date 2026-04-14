@@ -96,10 +96,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_characterclass");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_characterclass_dnd_characterclass_name");
+                    .HasDatabaseName("dnd_characterclass_dnd_characterclass_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_characterclass_dnd_characterclass_slug_uniq");
+                    .HasDatabaseName("dnd_characterclass_dnd_characterclass_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -137,13 +137,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_characterclassvariant");
 
                 entity.HasIndex(e => e.CharacterClassId)
-                    .HasName("dnd_characterclassvariant_dnd_characterclassvariant_4d1287f7");
+                    .HasDatabaseName("dnd_characterclassvariant_dnd_characterclassvariant_4d1287f7");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_characterclassvariant_dnd_characterclassvariant_51956a35");
+                    .HasDatabaseName("dnd_characterclassvariant_dnd_characterclassvariant_51956a35");
 
                 entity.HasIndex(e => new { e.RulebookId, e.CharacterClassId })
-                    .HasName("dnd_characterclassvariant_dnd_characterclassvariant_rulebook_id_69a6fb11587c030e_uniq");
+                    .HasDatabaseName("dnd_characterclassvariant_dnd_characterclassvariant_rulebook_id_69a6fb11587c030e_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -230,13 +230,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_characterclassvariant_class_skills");
 
                 entity.HasIndex(e => e.CharacterclassvariantId)
-                    .HasName("dnd_characterclassvariant_class_skills_dnd_characterclassvariant_class_skills_62519975");
+                    .HasDatabaseName("dnd_characterclassvariant_class_skills_dnd_characterclassvariant_class_skills_62519975");
 
                 entity.HasIndex(e => e.SkillId)
-                    .HasName("dnd_characterclassvariant_class_skills_dnd_characterclassvariant_class_skills_30f70346");
+                    .HasDatabaseName("dnd_characterclassvariant_class_skills_dnd_characterclassvariant_class_skills_30f70346");
 
                 entity.HasIndex(e => new { e.CharacterclassvariantId, e.SkillId })
-                    .HasName("dnd_characterclassvariant_class_skills_dnd_charactercla_characterclassvariant_id_594218372f051506_uniq");
+                    .HasDatabaseName("dnd_characterclassvariant_class_skills_dnd_charactercla_characterclassvariant_id_594218372f051506_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -267,10 +267,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_characterclassvariantrequiresfeat");
 
                 entity.HasIndex(e => e.CharacterClassVariantId)
-                    .HasName("dnd_characterclassvariantrequiresfeat_dnd_characterclassvariantrequiresfeat_433a4f0b");
+                    .HasDatabaseName("dnd_characterclassvariantrequiresfeat_dnd_characterclassvariantrequiresfeat_433a4f0b");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_characterclassvariantrequiresfeat_dnd_characterclassvariantrequiresfeat_2f59e7d8");
+                    .HasDatabaseName("dnd_characterclassvariantrequiresfeat_dnd_characterclassvariantrequiresfeat_2f59e7d8");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -320,10 +320,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_characterclassvariantrequiresrace");
 
                 entity.HasIndex(e => e.CharacterClassVariantId)
-                    .HasName("dnd_characterclassvariantrequiresrace_dnd_characterclassvariantrequiresrace_433a4f0b");
+                    .HasDatabaseName("dnd_characterclassvariantrequiresrace_dnd_characterclassvariantrequiresrace_433a4f0b");
 
                 entity.HasIndex(e => e.RaceId)
-                    .HasName("dnd_characterclassvariantrequiresrace_dnd_characterclassvariantrequiresrace_3548c065");
+                    .HasDatabaseName("dnd_characterclassvariantrequiresrace_dnd_characterclassvariantrequiresrace_3548c065");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -373,10 +373,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_characterclassvariantrequiresskill");
 
                 entity.HasIndex(e => e.CharacterClassVariantId)
-                    .HasName("dnd_characterclassvariantrequiresskill_dnd_characterclassvariantrequiresskill_433a4f0b");
+                    .HasDatabaseName("dnd_characterclassvariantrequiresskill_dnd_characterclassvariantrequiresskill_433a4f0b");
 
                 entity.HasIndex(e => e.SkillId)
-                    .HasName("dnd_characterclassvariantrequiresskill_dnd_characterclassvariantrequiresskill_30f70346");
+                    .HasDatabaseName("dnd_characterclassvariantrequiresskill_dnd_characterclassvariantrequiresskill_30f70346");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -430,13 +430,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_deity");
 
                 entity.HasIndex(e => e.FavoredWeaponId)
-                    .HasName("dnd_deity_dnd_deity_42d3ba94");
+                    .HasDatabaseName("dnd_deity_dnd_deity_42d3ba94");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_deity_name");
+                    .HasDatabaseName("dnd_deity_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_deity_slug");
+                    .HasDatabaseName("dnd_deity_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -482,10 +482,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_dndedition");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_dndedition_dnd_dndedition_name");
+                    .HasDatabaseName("dnd_dndedition_dnd_dndedition_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_dndedition_dnd_dndedition_slug_uniq");
+                    .HasDatabaseName("dnd_dndedition_dnd_dndedition_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -517,10 +517,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_domain");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_domain_dnd_domain_name_uniq");
+                    .HasDatabaseName("dnd_domain_dnd_domain_name_uniq");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_domain_dnd_domain_slug_uniq");
+                    .HasDatabaseName("dnd_domain_dnd_domain_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -543,10 +543,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_domainvariant");
 
                 entity.HasIndex(e => e.DomainId)
-                    .HasName("dnd_domainvariant_dnd_domainvariant_a2431ea");
+                    .HasDatabaseName("dnd_domainvariant_dnd_domainvariant_a2431ea");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_domainvariant_dnd_domainvariant_51956a35");
+                    .HasDatabaseName("dnd_domainvariant_dnd_domainvariant_51956a35");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -606,13 +606,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_domainvariant_deities");
 
                 entity.HasIndex(e => e.DeityId)
-                    .HasName("dnd_domainvariant_deities_dnd_domainvariant_deities_27307746");
+                    .HasDatabaseName("dnd_domainvariant_deities_dnd_domainvariant_deities_27307746");
 
                 entity.HasIndex(e => e.DomainvariantId)
-                    .HasName("dnd_domainvariant_deities_dnd_domainvariant_deities_226d9ee2");
+                    .HasDatabaseName("dnd_domainvariant_deities_dnd_domainvariant_deities_226d9ee2");
 
                 entity.HasIndex(e => new { e.DomainvariantId, e.DeityId })
-                    .HasName("dnd_domainvariant_deities_dnd_domainvariant_deities_domainvariant_id_e102dfb14ee5c6d_uniq");
+                    .HasDatabaseName("dnd_domainvariant_deities_dnd_domainvariant_deities_domainvariant_id_e102dfb14ee5c6d_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -643,13 +643,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_domainvariant_other_deities");
 
                 entity.HasIndex(e => e.DeityId)
-                    .HasName("dnd_domainvariant_other_deities_dnd_domainvariant_other_deities_27307746");
+                    .HasDatabaseName("dnd_domainvariant_other_deities_dnd_domainvariant_other_deities_27307746");
 
                 entity.HasIndex(e => e.DomainvariantId)
-                    .HasName("dnd_domainvariant_other_deities_dnd_domainvariant_other_deities_226d9ee2");
+                    .HasDatabaseName("dnd_domainvariant_other_deities_dnd_domainvariant_other_deities_226d9ee2");
 
                 entity.HasIndex(e => new { e.DomainvariantId, e.DeityId })
-                    .HasName("dnd_domainvariant_other_deities_dnd_domainvariant_other_d_domainvariant_id_a674a18dfab6630_uniq");
+                    .HasDatabaseName("dnd_domainvariant_other_deities_dnd_domainvariant_other_d_domainvariant_id_a674a18dfab6630_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -680,13 +680,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_feat");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_feat_dnd_feat_name");
+                    .HasDatabaseName("dnd_feat_dnd_feat_name");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_feat_dnd_feat_51956a35");
+                    .HasDatabaseName("dnd_feat_dnd_feat_51956a35");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_feat_dnd_feat_a951d5d6");
+                    .HasDatabaseName("dnd_feat_dnd_feat_a951d5d6");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -762,13 +762,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_feat_feat_categories");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_feat_feat_categories_dnd_feat_feat_categories_2f59e7d8");
+                    .HasDatabaseName("dnd_feat_feat_categories_dnd_feat_feat_categories_2f59e7d8");
 
                 entity.HasIndex(e => e.FeatcategoryId)
-                    .HasName("dnd_feat_feat_categories_dnd_feat_feat_categories_5509d08");
+                    .HasDatabaseName("dnd_feat_feat_categories_dnd_feat_feat_categories_5509d08");
 
                 entity.HasIndex(e => new { e.FeatId, e.FeatcategoryId })
-                    .HasName("dnd_feat_feat_categories_dnd_feat_feat_categories_feat_id_3a0b9d0392305885_uniq");
+                    .HasDatabaseName("dnd_feat_feat_categories_dnd_feat_feat_categories_feat_id_3a0b9d0392305885_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -799,10 +799,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_featcategory");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_featcategory_dnd_featcategory_name_uniq");
+                    .HasDatabaseName("dnd_featcategory_dnd_featcategory_name_uniq");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_featcategory_dnd_featcategory_slug_uniq");
+                    .HasDatabaseName("dnd_featcategory_dnd_featcategory_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -825,10 +825,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_featrequiresfeat");
 
                 entity.HasIndex(e => e.RequiredFeatId)
-                    .HasName("dnd_featrequiresfeat_dnd_featrequiresfeat_8238d861");
+                    .HasDatabaseName("dnd_featrequiresfeat_dnd_featrequiresfeat_8238d861");
 
                 entity.HasIndex(e => e.SourceFeatId)
-                    .HasName("dnd_featrequiresfeat_dnd_featrequiresfeat_dc102e93");
+                    .HasDatabaseName("dnd_featrequiresfeat_dnd_featrequiresfeat_dc102e93");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -864,10 +864,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_featrequiresskill");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_featrequiresskill_dnd_featrequiresskill_2f59e7d8");
+                    .HasDatabaseName("dnd_featrequiresskill_dnd_featrequiresskill_2f59e7d8");
 
                 entity.HasIndex(e => e.SkillId)
-                    .HasName("dnd_featrequiresskill_dnd_featrequiresskill_30f70346");
+                    .HasDatabaseName("dnd_featrequiresskill_dnd_featrequiresskill_30f70346");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -907,10 +907,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_featspecialfeatprerequisite");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_featspecialfeatprerequisite_dnd_featspecialfeatprerequisite_2f59e7d8");
+                    .HasDatabaseName("dnd_featspecialfeatprerequisite_dnd_featspecialfeatprerequisite_2f59e7d8");
 
                 entity.HasIndex(e => e.SpecialFeatPrerequisiteId)
-                    .HasName("dnd_featspecialfeatprerequisite_dnd_featspecialfeatprerequisite_c2048d74");
+                    .HasDatabaseName("dnd_featspecialfeatprerequisite_dnd_featspecialfeatprerequisite_c2048d74");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -951,28 +951,28 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_item");
 
                 entity.HasIndex(e => e.ActivationId)
-                    .HasName("dnd_item_dnd_item_a7ff055e");
+                    .HasDatabaseName("dnd_item_dnd_item_a7ff055e");
 
                 entity.HasIndex(e => e.AuraId)
-                    .HasName("dnd_item_dnd_item_c181fb11");
+                    .HasDatabaseName("dnd_item_dnd_item_c181fb11");
 
                 entity.HasIndex(e => e.BodySlotId)
-                    .HasName("dnd_item_dnd_item_35a44c52");
+                    .HasDatabaseName("dnd_item_dnd_item_35a44c52");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_item_dnd_item_52094d6e");
+                    .HasDatabaseName("dnd_item_dnd_item_52094d6e");
 
                 entity.HasIndex(e => e.PropertyId)
-                    .HasName("dnd_item_dnd_item_6a812853");
+                    .HasDatabaseName("dnd_item_dnd_item_6a812853");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_item_dnd_item_51956a35");
+                    .HasDatabaseName("dnd_item_dnd_item_51956a35");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_item_slug");
+                    .HasDatabaseName("dnd_item_slug");
 
                 entity.HasIndex(e => e.SynergyPrerequisiteId)
-                    .HasName("dnd_item_dnd_item_ed720ca8");
+                    .HasDatabaseName("dnd_item_dnd_item_ed720ca8");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1103,13 +1103,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_item_aura_schools");
 
                 entity.HasIndex(e => e.ItemId)
-                    .HasName("dnd_item_aura_schools_dnd_item_aura_schools_67b70d25");
+                    .HasDatabaseName("dnd_item_aura_schools_dnd_item_aura_schools_67b70d25");
 
                 entity.HasIndex(e => e.SpellschoolId)
-                    .HasName("dnd_item_aura_schools_dnd_item_aura_schools_a7db21ef");
+                    .HasDatabaseName("dnd_item_aura_schools_dnd_item_aura_schools_a7db21ef");
 
                 entity.HasIndex(e => new { e.ItemId, e.SpellschoolId })
-                    .HasName("dnd_item_aura_schools_dnd_item_aura_schools_item_id_345bdf3601d7f155_uniq");
+                    .HasDatabaseName("dnd_item_aura_schools_dnd_item_aura_schools_item_id_345bdf3601d7f155_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1140,13 +1140,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_item_required_feats");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_item_required_feats_dnd_item_required_feats_2f59e7d8");
+                    .HasDatabaseName("dnd_item_required_feats_dnd_item_required_feats_2f59e7d8");
 
                 entity.HasIndex(e => e.ItemId)
-                    .HasName("dnd_item_required_feats_dnd_item_required_feats_67b70d25");
+                    .HasDatabaseName("dnd_item_required_feats_dnd_item_required_feats_67b70d25");
 
                 entity.HasIndex(e => new { e.ItemId, e.FeatId })
-                    .HasName("dnd_item_required_feats_dnd_item_required_feats_item_id_86ffea90e89a0f2_uniq");
+                    .HasDatabaseName("dnd_item_required_feats_dnd_item_required_feats_item_id_86ffea90e89a0f2_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1177,13 +1177,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_item_required_spells");
 
                 entity.HasIndex(e => e.ItemId)
-                    .HasName("dnd_item_required_spells_dnd_item_required_spells_67b70d25");
+                    .HasDatabaseName("dnd_item_required_spells_dnd_item_required_spells_67b70d25");
 
                 entity.HasIndex(e => e.SpellId)
-                    .HasName("dnd_item_required_spells_dnd_item_required_spells_a091809d");
+                    .HasDatabaseName("dnd_item_required_spells_dnd_item_required_spells_a091809d");
 
                 entity.HasIndex(e => new { e.ItemId, e.SpellId })
-                    .HasName("dnd_item_required_spells_dnd_item_required_spells_item_id_4420551901ef62b4_uniq");
+                    .HasDatabaseName("dnd_item_required_spells_dnd_item_required_spells_item_id_4420551901ef62b4_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1214,10 +1214,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_itemactivationtype");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_itemactivationtype_dnd_itemactivationtype_52094d6e");
+                    .HasDatabaseName("dnd_itemactivationtype_dnd_itemactivationtype_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_itemactivationtype_slug");
+                    .HasDatabaseName("dnd_itemactivationtype_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1240,10 +1240,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_itemauratype");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_itemauratype_dnd_itemauratype_52094d6e");
+                    .HasDatabaseName("dnd_itemauratype_dnd_itemauratype_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_itemauratype_slug");
+                    .HasDatabaseName("dnd_itemauratype_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1266,10 +1266,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_itemproperty");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_itemproperty_dnd_itemproperty_52094d6e");
+                    .HasDatabaseName("dnd_itemproperty_dnd_itemproperty_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_itemproperty_slug");
+                    .HasDatabaseName("dnd_itemproperty_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1292,10 +1292,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_itemslot");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_itemslot_dnd_itemslot_52094d6e");
+                    .HasDatabaseName("dnd_itemslot_dnd_itemslot_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_itemslot_slug");
+                    .HasDatabaseName("dnd_itemslot_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1318,7 +1318,7 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_language");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_language_slug");
+                    .HasDatabaseName("dnd_language_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1351,22 +1351,22 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monster");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_monster_dnd_monster_52094d6e");
+                    .HasDatabaseName("dnd_monster_dnd_monster_52094d6e");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_monster_dnd_monster_51956a35");
+                    .HasDatabaseName("dnd_monster_dnd_monster_51956a35");
 
                 entity.HasIndex(e => e.SizeId)
-                    .HasName("dnd_monster_dnd_monster_6154b20f");
+                    .HasDatabaseName("dnd_monster_dnd_monster_6154b20f");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_monster_dnd_monster_a951d5d6");
+                    .HasDatabaseName("dnd_monster_dnd_monster_a951d5d6");
 
                 entity.HasIndex(e => e.TypeId)
-                    .HasName("dnd_monster_dnd_monster_777d41c8");
+                    .HasDatabaseName("dnd_monster_dnd_monster_777d41c8");
 
                 entity.HasIndex(e => new { e.Name, e.RulebookId })
-                    .HasName("dnd_monster_dnd_monster_name_5810a781de09be1f_uniq");
+                    .HasDatabaseName("dnd_monster_dnd_monster_name_5810a781de09be1f_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1584,13 +1584,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monster_subtypes");
 
                 entity.HasIndex(e => e.MonsterId)
-                    .HasName("dnd_monster_subtypes_dnd_monster_subtypes_6608660b");
+                    .HasDatabaseName("dnd_monster_subtypes_dnd_monster_subtypes_6608660b");
 
                 entity.HasIndex(e => e.MonstersubtypeId)
-                    .HasName("dnd_monster_subtypes_dnd_monster_subtypes_3c3013de");
+                    .HasDatabaseName("dnd_monster_subtypes_dnd_monster_subtypes_3c3013de");
 
                 entity.HasIndex(e => new { e.MonsterId, e.MonstersubtypeId })
-                    .HasName("dnd_monster_subtypes_dnd_monster_subtypes_monster_id_7716d36de2720dc0_uniq");
+                    .HasDatabaseName("dnd_monster_subtypes_dnd_monster_subtypes_monster_id_7716d36de2720dc0_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1621,10 +1621,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monsterhasfeat");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_monsterhasfeat_dnd_monsterhasfeat_2f59e7d8");
+                    .HasDatabaseName("dnd_monsterhasfeat_dnd_monsterhasfeat_2f59e7d8");
 
                 entity.HasIndex(e => e.MonsterId)
-                    .HasName("dnd_monsterhasfeat_dnd_monsterhasfeat_6608660b");
+                    .HasDatabaseName("dnd_monsterhasfeat_dnd_monsterhasfeat_6608660b");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1660,10 +1660,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monsterhasskill");
 
                 entity.HasIndex(e => e.MonsterId)
-                    .HasName("dnd_monsterhasskill_dnd_monsterhasskill_6608660b");
+                    .HasDatabaseName("dnd_monsterhasskill_dnd_monsterhasskill_6608660b");
 
                 entity.HasIndex(e => e.SkillId)
-                    .HasName("dnd_monsterhasskill_dnd_monsterhasskill_30f70346");
+                    .HasDatabaseName("dnd_monsterhasskill_dnd_monsterhasskill_30f70346");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1703,10 +1703,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monsterspeed");
 
                 entity.HasIndex(e => e.RaceId)
-                    .HasName("dnd_monsterspeed_dnd_monsterspeed_3548c065");
+                    .HasDatabaseName("dnd_monsterspeed_dnd_monsterspeed_3548c065");
 
                 entity.HasIndex(e => e.TypeId)
-                    .HasName("dnd_monsterspeed_dnd_monsterspeed_777d41c8");
+                    .HasDatabaseName("dnd_monsterspeed_dnd_monsterspeed_777d41c8");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1741,10 +1741,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monstersubtype");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_monstersubtype_dnd_monstersubtype_52094d6e");
+                    .HasDatabaseName("dnd_monstersubtype_dnd_monstersubtype_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_monstersubtype_dnd_monstersubtype_slug_uniq");
+                    .HasDatabaseName("dnd_monstersubtype_dnd_monstersubtype_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1767,10 +1767,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_monstertype");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_monstertype_dnd_monstertype_52094d6e");
+                    .HasDatabaseName("dnd_monstertype_dnd_monstertype_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_monstertype_dnd_monstertype_slug_uniq");
+                    .HasDatabaseName("dnd_monstertype_dnd_monstertype_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1827,22 +1827,22 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_race");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_race_dnd_race_52094d6e");
+                    .HasDatabaseName("dnd_race_dnd_race_52094d6e");
 
                 entity.HasIndex(e => e.RaceTypeId)
-                    .HasName("dnd_race_dnd_race_34628d95");
+                    .HasDatabaseName("dnd_race_dnd_race_34628d95");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_race_dnd_race_51956a35");
+                    .HasDatabaseName("dnd_race_dnd_race_51956a35");
 
                 entity.HasIndex(e => e.SizeId)
-                    .HasName("dnd_race_dnd_race_6154b20f");
+                    .HasDatabaseName("dnd_race_dnd_race_6154b20f");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_race_dnd_race_a951d5d6");
+                    .HasDatabaseName("dnd_race_dnd_race_a951d5d6");
 
                 entity.HasIndex(e => new { e.Name, e.RulebookId })
-                    .HasName("dnd_race_dnd_race_name_64b932b074325211_uniq");
+                    .HasDatabaseName("dnd_race_dnd_race_name_64b932b074325211_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1977,13 +1977,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_race_automatic_languages");
 
                 entity.HasIndex(e => e.LanguageId)
-                    .HasName("dnd_race_automatic_languages_dnd_race_automatic_languages_7ab48146");
+                    .HasDatabaseName("dnd_race_automatic_languages_dnd_race_automatic_languages_7ab48146");
 
                 entity.HasIndex(e => e.RaceId)
-                    .HasName("dnd_race_automatic_languages_dnd_race_automatic_languages_3548c065");
+                    .HasDatabaseName("dnd_race_automatic_languages_dnd_race_automatic_languages_3548c065");
 
                 entity.HasIndex(e => new { e.RaceId, e.LanguageId })
-                    .HasName("dnd_race_automatic_languages_dnd_race_automatic_languages_race_id_4ef05d055298a9df_uniq");
+                    .HasDatabaseName("dnd_race_automatic_languages_dnd_race_automatic_languages_race_id_4ef05d055298a9df_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2014,13 +2014,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_race_bonus_languages");
 
                 entity.HasIndex(e => e.LanguageId)
-                    .HasName("dnd_race_bonus_languages_dnd_race_bonus_languages_7ab48146");
+                    .HasDatabaseName("dnd_race_bonus_languages_dnd_race_bonus_languages_7ab48146");
 
                 entity.HasIndex(e => e.RaceId)
-                    .HasName("dnd_race_bonus_languages_dnd_race_bonus_languages_3548c065");
+                    .HasDatabaseName("dnd_race_bonus_languages_dnd_race_bonus_languages_3548c065");
 
                 entity.HasIndex(e => new { e.RaceId, e.LanguageId })
-                    .HasName("dnd_race_bonus_languages_dnd_race_bonus_languages_race_id_1922bed42ad1b62b_uniq");
+                    .HasDatabaseName("dnd_race_bonus_languages_dnd_race_bonus_languages_race_id_1922bed42ad1b62b_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2051,10 +2051,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_racefavoredcharacterclass");
 
                 entity.HasIndex(e => e.CharacterClassId)
-                    .HasName("dnd_racefavoredcharacterclass_dnd_racefavoredcharacterclass_4d1287f7");
+                    .HasDatabaseName("dnd_racefavoredcharacterclass_dnd_racefavoredcharacterclass_4d1287f7");
 
                 entity.HasIndex(e => e.RaceId)
-                    .HasName("dnd_racefavoredcharacterclass_dnd_racefavoredcharacterclass_3548c065");
+                    .HasDatabaseName("dnd_racefavoredcharacterclass_dnd_racefavoredcharacterclass_3548c065");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2090,7 +2090,7 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_racesize");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_racesize_dnd_racesize_52094d6e");
+                    .HasDatabaseName("dnd_racesize_dnd_racesize_52094d6e");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2117,10 +2117,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_racespeed");
 
                 entity.HasIndex(e => e.RaceId)
-                    .HasName("dnd_racespeed_dnd_racespeed_3548c065");
+                    .HasDatabaseName("dnd_racespeed_dnd_racespeed_3548c065");
 
                 entity.HasIndex(e => e.TypeId)
-                    .HasName("dnd_racespeed_dnd_racespeed_777d41c8");
+                    .HasDatabaseName("dnd_racespeed_dnd_racespeed_777d41c8");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2155,7 +2155,7 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_racespeedtype");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_racespeedtype_dnd_racespeedtype_52094d6e");
+                    .HasDatabaseName("dnd_racespeedtype_dnd_racespeedtype_52094d6e");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2177,10 +2177,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_racetype");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_racetype_dnd_racetype_52094d6e");
+                    .HasDatabaseName("dnd_racetype_dnd_racetype_52094d6e");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_racetype_slug");
+                    .HasDatabaseName("dnd_racetype_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2227,13 +2227,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_rule");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_rule_dnd_rule_52094d6e");
+                    .HasDatabaseName("dnd_rule_dnd_rule_52094d6e");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_rule_dnd_rule_51956a35");
+                    .HasDatabaseName("dnd_rule_dnd_rule_51956a35");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_rule_slug");
+                    .HasDatabaseName("dnd_rule_slug");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2283,13 +2283,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_rulebook");
 
                 entity.HasIndex(e => e.DndEditionId)
-                    .HasName("dnd_rulebook_dnd_rulebook_66a88bda");
+                    .HasDatabaseName("dnd_rulebook_dnd_rulebook_66a88bda");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_rulebook_dnd_rulebook_name");
+                    .HasDatabaseName("dnd_rulebook_dnd_rulebook_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_rulebook_dnd_rulebook_slug_uniq");
+                    .HasDatabaseName("dnd_rulebook_dnd_rulebook_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2361,10 +2361,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_skill");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_skill_dnd_skill_name_uniq");
+                    .HasDatabaseName("dnd_skill_dnd_skill_name_uniq");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_skill_dnd_skill_slug_uniq");
+                    .HasDatabaseName("dnd_skill_dnd_skill_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2402,13 +2402,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_skillvariant");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_skillvariant_dnd_skillvariant_51956a35");
+                    .HasDatabaseName("dnd_skillvariant_dnd_skillvariant_51956a35");
 
                 entity.HasIndex(e => e.SkillId)
-                    .HasName("dnd_skillvariant_dnd_skillvariant_30f70346");
+                    .HasDatabaseName("dnd_skillvariant_dnd_skillvariant_30f70346");
 
                 entity.HasIndex(e => new { e.SkillId, e.RulebookId })
-                    .HasName("dnd_skillvariant_dnd_skillvariant_skill_id_65a2ff28b87f4e1e_uniq");
+                    .HasDatabaseName("dnd_skillvariant_dnd_skillvariant_skill_id_65a2ff28b87f4e1e_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2523,7 +2523,7 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_specialfeatprerequisite");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_specialfeatprerequisite_name");
+                    .HasDatabaseName("dnd_specialfeatprerequisite_name");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2546,25 +2546,25 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spell");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_spell_dnd_spell_name");
+                    .HasDatabaseName("dnd_spell_dnd_spell_name");
 
                 entity.HasIndex(e => e.RulebookId)
-                    .HasName("dnd_spell_dnd_spell_51956a35");
+                    .HasDatabaseName("dnd_spell_dnd_spell_51956a35");
 
                 entity.HasIndex(e => e.SchoolId)
-                    .HasName("dnd_spell_dnd_spell_1ebdc00a");
+                    .HasDatabaseName("dnd_spell_dnd_spell_1ebdc00a");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_spell_dnd_spell_a951d5d6");
+                    .HasDatabaseName("dnd_spell_dnd_spell_a951d5d6");
 
                 entity.HasIndex(e => e.SubSchoolId)
-                    .HasName("dnd_spell_dnd_spell_20f50c5d");
+                    .HasDatabaseName("dnd_spell_dnd_spell_20f50c5d");
 
                 entity.HasIndex(e => e.VerifiedAuthorId)
-                    .HasName("dnd_spell_dnd_spell_63f7f931");
+                    .HasDatabaseName("dnd_spell_dnd_spell_63f7f931");
 
                 entity.HasIndex(e => new { e.Name, e.RulebookId })
-                    .HasName("dnd_spell_dnd_spell_name_496ee28f7dbb33a7_uniq");
+                    .HasDatabaseName("dnd_spell_dnd_spell_name_496ee28f7dbb33a7_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2726,13 +2726,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spell_descriptors");
 
                 entity.HasIndex(e => e.SpellId)
-                    .HasName("dnd_spell_descriptors_dnd_spell_descriptors_a091809d");
+                    .HasDatabaseName("dnd_spell_descriptors_dnd_spell_descriptors_a091809d");
 
                 entity.HasIndex(e => e.SpelldescriptorId)
-                    .HasName("dnd_spell_descriptors_dnd_spell_descriptors_30529786");
+                    .HasDatabaseName("dnd_spell_descriptors_dnd_spell_descriptors_30529786");
 
                 entity.HasIndex(e => new { e.SpellId, e.SpelldescriptorId })
-                    .HasName("dnd_spell_descriptors_dnd_spell_descriptors_spell_id_dbd1aa136fb353e_uniq");
+                    .HasDatabaseName("dnd_spell_descriptors_dnd_spell_descriptors_spell_id_dbd1aa136fb353e_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2763,13 +2763,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spellclasslevel");
 
                 entity.HasIndex(e => e.CharacterClassId)
-                    .HasName("dnd_spellclasslevel_dnd_spellclasslevel_4d1287f7");
+                    .HasDatabaseName("dnd_spellclasslevel_dnd_spellclasslevel_4d1287f7");
 
                 entity.HasIndex(e => e.SpellId)
-                    .HasName("dnd_spellclasslevel_dnd_spellclasslevel_a091809d");
+                    .HasDatabaseName("dnd_spellclasslevel_dnd_spellclasslevel_a091809d");
 
                 entity.HasIndex(e => new { e.CharacterClassId, e.SpellId })
-                    .HasName("dnd_spellclasslevel_dnd_spellclasslevel_character_class_id_3ae23c8563a83798_uniq");
+                    .HasDatabaseName("dnd_spellclasslevel_dnd_spellclasslevel_character_class_id_3ae23c8563a83798_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2809,10 +2809,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spelldescriptor");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_spelldescriptor_name");
+                    .HasDatabaseName("dnd_spelldescriptor_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_spelldescriptor_dnd_spelldescriptor_slug_uniq");
+                    .HasDatabaseName("dnd_spelldescriptor_dnd_spelldescriptor_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2835,13 +2835,13 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spelldomainlevel");
 
                 entity.HasIndex(e => e.DomainId)
-                    .HasName("dnd_spelldomainlevel_dnd_spelldomainlevel_a2431ea");
+                    .HasDatabaseName("dnd_spelldomainlevel_dnd_spelldomainlevel_a2431ea");
 
                 entity.HasIndex(e => e.SpellId)
-                    .HasName("dnd_spelldomainlevel_dnd_spelldomainlevel_a091809d");
+                    .HasDatabaseName("dnd_spelldomainlevel_dnd_spelldomainlevel_a091809d");
 
                 entity.HasIndex(e => new { e.DomainId, e.SpellId })
-                    .HasName("dnd_spelldomainlevel_dnd_spelldomainlevel_domain_id_e7bf8594e3b6bda_uniq");
+                    .HasDatabaseName("dnd_spelldomainlevel_dnd_spelldomainlevel_domain_id_e7bf8594e3b6bda_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2881,10 +2881,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spellschool");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_spellschool_name");
+                    .HasDatabaseName("dnd_spellschool_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_spellschool_dnd_spellschool_slug_uniq");
+                    .HasDatabaseName("dnd_spellschool_dnd_spellschool_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2907,10 +2907,10 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_spellsubschool");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_spellsubschool_name");
+                    .HasDatabaseName("dnd_spellsubschool_name");
 
                 entity.HasIndex(e => e.Slug)
-                    .HasName("dnd_spellsubschool_dnd_spellsubschool_slug_uniq");
+                    .HasDatabaseName("dnd_spellsubschool_dnd_spellsubschool_slug_uniq");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2933,7 +2933,7 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_staticpage");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("dnd_staticpage_name");
+                    .HasDatabaseName("dnd_staticpage_name");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -2961,7 +2961,7 @@ namespace dnd_dal.dao
                 entity.ToTable("dnd_textfeatprerequisite");
 
                 entity.HasIndex(e => e.FeatId)
-                    .HasName("dnd_textfeatprerequisite_dnd_textfeatprerequisite_2f59e7d8");
+                    .HasDatabaseName("dnd_textfeatprerequisite_dnd_textfeatprerequisite_2f59e7d8");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
